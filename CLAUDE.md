@@ -34,6 +34,13 @@ streamlit run app.py
 
 ## Current State
 Checkpoint 0 complete — scaffold only. No feature code yet.
+## Current State
+Checkpoint 2 complete — prompt evaluation done, V1 wins at 90% accuracy.
+
+
 
 ## What's Next
 Checkpoint 1 — Claude API fundamentals: config.py, client.py, prompts.py, main.py
+
+## What's Next
+Checkpoint 3 — Tool calling: tools.py, agent.py, real Adzuna API, SQLite
