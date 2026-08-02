@@ -1,0 +1,14 @@
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "matcher": {
+        "tool_name": "Edit",
+        "file_paths": ["*.py"]
+      },
+      "command": "python -m pytest tests/ -v",
+      "blocking": true,
+      "on_failure": "block"
+    }
+  ]
+}
