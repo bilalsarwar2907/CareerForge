@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "cv": "Python developer, 5 years FastAPI, PostgreSQL, Docker, CI/CD, pytest",
+    "job": "Backend Python developer. FastAPI and PostgreSQL required. TDD preferred.",
+    "expected_score_min": 80,
+    "expected_score_max": 100
+  },
+  {
+    "id": 2,
+    "cv": "Marketing manager, brand strategy, campaign management, no coding",
+    "job": "Junior React developer, JavaScript and CSS required",
+    "expected_score_min": 0,
+    "expected_score_max": 15
+  },
+  {
+    "id": 3,
+    "cv": "Data scientist, Python, pandas, scikit-learn, SQL, Jupyter",
+    "job": "Machine learning engineer, Python, TensorFlow, model deployment",
+    "expected_score_min": 55,
+    "expected_score_max": 75
+  },
+  {
+    "id": 4,
+    "cv": "Java developer, Spring Boot, Hibernate, MySQL, 4 years experience",
+    "job": "Python backend developer, Django, PostgreSQL, REST APIs",
+    "expected_score_min": 20,
+    "expected_score_max": 45
+  },
+  {
+    "id": 5,
+    "cv": "Full stack developer, React, Node.js, PostgreSQL, Docker, 3 years",
+    "job": "Frontend React developer, JavaScript, CSS, Redux",
+    "expected_score_min": 65,
+    "expected_score_max": 85
+  },
+  {
+    "id": 6,
+    "cv": "DevOps engineer, AWS, Terraform, Kubernetes, CI/CD, Docker",
+    "job": "Cloud infrastructure engineer, AWS, Kubernetes, Terraform required",
+    "expected_score_min": 85,
+    "expected_score_max": 100
+  },
+  {
+    "id": 7,
+    "cv": "Graphic designer, Photoshop, Illustrator, Figma, no coding",
+    "job": "Backend Python developer, APIs, databases",
+    "expected_score_min": 0,
+    "expected_score_max": 10
+  },
+  {
+    "id": 8,
+    "cv": "Junior Python developer, 1 year, basic Django, no production experience",
+    "job": "Senior Python developer, 5 years required, FastAPI, microservices",
+    "expected_score_min": 15,
+    "expected_score_max": 35
+  },
+  {
+    "id": 9,
+    "cv": "React developer, JavaScript, TypeScript, Redux, REST APIs, 3 years",
+    "job": "Full stack developer, React frontend, Node.js backend, PostgreSQL",
+    "expected_score_min": 60,
+    "expected_score_max": 80
+  },
+  {
+    "id": 10,
+    "cv": "Python developer, FastAPI, PostgreSQL, Docker, pytest, CI/CD, AWS, 6 years",
+    "job": "Backend Python developer, FastAPI, PostgreSQL, Docker, AWS preferred",
+    "expected_score_min": 90,
+    "expected_score_max": 100
+  },
+  {
+    "id": 11,
+    "cv": "Accountant, Excel, financial reporting, tax compliance, no tech skills",
+    "job": "Software engineer, any language, computer science degree required",
+    "expected_score_min": 0,
+    "expected_score_max": 10
+  },
+  {
+    "id": 12,
+    "cv": "Node.js developer, Express, MongoDB, REST APIs, JavaScript, 2 years",
+    "job": "Backend developer, any language, REST APIs, databases, 2 years",
+    "expected_score_min": 65,
+    "expected_score_max": 85
+  },
+  {
+    "id": 13,
+    "cv": "Python developer, Django, MySQL, basic Docker, 2 years",
+    "job": "Python developer, FastAPI preferred, PostgreSQL, Docker required",
+    "expected_score_min": 40,
+    "expected_score_max": 65
+  },
+  {
+    "id": 14,
+    "cv": "Mobile developer, Swift, iOS, Xcode, UIKit, 4 years",
+    "job": "Android developer, Kotlin, Android Studio, Jetpack Compose",
+    "expected_score_min": 15,
+    "expected_score_max": 35
+  },
+  {
+    "id": 15,
+    "cv": "Senior software engineer, Python, Java, AWS, system design, 8 years",
+    "job": "Engineering manager, team leadership, Python background preferred",
+    "expected_score_min": 50,
+    "expected_score_max": 70
+  },
+  {
+    "id": 16,
+    "cv": "QA engineer, Selenium, pytest, API testing, CI/CD, Python scripting",
+    "job": "Python backend developer, FastAPI, PostgreSQL, production experience",
+    "expected_score_min": 20,
+    "expected_score_max": 40
+  },
+  {
+    "id": 17,
+    "cv": "Data engineer, Python, Apache Spark, Airflow, PostgreSQL, AWS S3",
+    "job": "Backend Python developer, REST APIs, PostgreSQL, AWS",
+    "expected_score_min": 55,
+    "expected_score_max": 75
+  },
+  {
+    "id": 18,
+    "cv": "Frontend developer, HTML, CSS, JavaScript, no backend experience",
+    "job": "Full stack developer, React, Node.js, PostgreSQL, Docker",
+    "expected_score_min": 25,
+    "expected_score_max": 45
+  },
+  {
+    "id": 19,
+    "cv": "Python developer, Flask, SQLite, basic REST APIs, 1 year",
+    "job": "Junior Python developer, Flask or Django, SQL databases, REST APIs",
+    "expected_score_min": 65,
+    "expected_score_max": 85
+  },
+  {
+    "id": 20,
+    "cv": "Backend developer, Python, FastAPI, PostgreSQL, Redis, Docker, Kubernetes, AWS, 5 years",
+    "job": "Senior backend engineer, Python, FastAPI, PostgreSQL, cloud experience required",
+    "expected_score_min": 90,
+    "expected_score_max": 100
+  }
+]
