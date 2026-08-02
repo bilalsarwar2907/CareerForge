@@ -1,4 +1,5 @@
 import os
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
 import nltk
 import chromadb
 from sentence_transformers import SentenceTransformer

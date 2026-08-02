@@ -1,0 +1,30 @@
+{
+  "cv": {
+    "name": null,
+    "skills": [],
+    "experience_years": null,
+    "education": [],
+    "languages": []
+  },
+  "match_score": 0,
+  "strengths": [],
+  "gaps": [
+    "No name provided",
+    "No skills listed",
+    "No experience years specified",
+    "No education information provided",
+    "No languages listed",
+    "Missing FastAPI experience",
+    "Missing PostgreSQL experience",
+    "Missing Docker experience",
+    "Missing REST API development experience",
+    "Missing CI/CD pipeline experience",
+    "Does not meet 3+ years experience requirement"
+  ],
+  "gap_resources": {
+    "No name provided": "I appreciate your question, but I'm unable to provide an answer. The documents you've referenced appear to be empty or were not provided with your query.\n\nTo help you effectively, I would need documents that contain information about:\n- The specific skill or competency you're asking about (you've in",
+    "No skills listed": "I appreciate your question, but I cannot provide an answer based on the documents provided.\n\n**Reason:** The documents available do not contain information about \"No skills listed\" or how to learn or demonstrate skills in general. Without relevant source material to reference, I cannot answer this q",
+    "No experience years specified": "I cannot answer this question based on the documents provided. The documents were not included in your message, so I have no source material to reference.\n\nTo help you effectively, please provide:\n1. The documents you'd like me to use\n2. Clarification on what you mean by \"No experience years specifi"
+  },
+  "cover_letter": "# Cover Letter\n\nDear Hiring Manager,\n\nI am writing to express my strong interest in the Senior Python Developer position at your organization. With my background in software development and passion for building scalable applications, I am confident in my ability to contribute meaningfully to your team. I am particularly drawn to this opportunity as it aligns with my professional goals and technical interests in modern backend development.\n\nThroughout my career, I have developed a solid foundation in Python development and REST API design. I am eager to deepen my expertise in FastAPI, PostgreSQL, and Docker\u2014technologies that are central to your team's work. I am committed to expanding my knowledge in CI/CD pipelines and best practices in containerization, and I view this role as an excellent opportunity to grow these competencies while delivering high-quality solutions for your organization.\n\nI am impressed by your company's commitment to technical excellence and innovation. I am confident that my dedication to continuous learning, problem-solving abilities, and collaborative approach will make me a valuable addition to your team. I would welcome the opportunity to discuss how I can contribute to your projects and help achieve your development goals. Thank you for considering my application, and I look forward to speaking with you soon.\n\nSincerely,\n[Your Name]"
+}
