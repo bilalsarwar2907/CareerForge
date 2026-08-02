@@ -1,0 +1,4 @@
+valid_json_pct,has_fields_pct,score_accuracy_pct,prompt
+100.0,100.0,100.0,v1_zeroshot
+100.0,100.0,80.0,v2_fewshot
+100.0,100.0,85.0,v3_xml
