@@ -1,0 +1,12 @@
+anthropic
+python-dotenv
+requests
+chromadb==0.6.3
+sentence-transformers
+rank-bm25
+pypdf
+nltk
+fastmcp
+streamlit
+pytest
+pytest-mock

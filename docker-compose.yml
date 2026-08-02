@@ -1,0 +1,8 @@
+services:
+  career-forge:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    env_file:
+      - .env

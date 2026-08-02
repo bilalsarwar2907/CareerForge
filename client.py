@@ -1,3 +1,5 @@
+import time
+import anthropic
 import json
 import re
 from anthropic import Anthropic
@@ -46,6 +48,21 @@ def repair_json(broken_text: str) -> dict:
     )
     repaired = response.content[0].text.strip()
     return json.loads(repaired)
+
+def call_with_retry(max_retries: int = 3, **kwargs):
+    """Call Claude API with automatic retry on rate limit errors."""
+    for attempt in range(max_retries):
+        try:
+            response = call_with_retry(**kwargs)
+        except anthropic.RateLimitError:
+            wait = 2 ** attempt
+            print(f"Rate limited. Retry {attempt+1}/{max_retries} in {wait}s")
+            time.sleep(wait)
+        except anthropic.APIStatusError as e:
+            print(f"API error {e.status_code}: {e.message}")
+            if attempt == max_retries - 1:
+                raise
+    raise RuntimeError("Max retries exceeded")
 
 
 def call_claude(prompt: str, system: str = "", max_tokens: int = 1024,
