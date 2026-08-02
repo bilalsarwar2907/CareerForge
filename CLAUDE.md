@@ -44,3 +44,39 @@ Checkpoint 1 — Claude API fundamentals: config.py, client.py, prompts.py, main
 
 ## What's Next
 Checkpoint 3 — Tool calling: tools.py, agent.py, real Adzuna API, SQLite
+
+## Known Issues (Unresolved)
+
+### ChromaDB PersistentClient Hang (Checkpoint 4)
+**Problem:** `chromadb.PersistentClient` hangs indefinitely when `SentenceTransformer` 
+is loaded in the same Python process on this machine (Windows, Python 3.14.3, ChromaDB 0.6.3).
+**Workaround:** Using `EphemeralClient` — index resets on every restart.
+**Impact:** RAG knowledge base is not persistent between sessions.
+**To fix:** Try ChromaDB 0.4.x, or run ChromaDB as a separate server process, 
+or replace with FAISS.
+**Must resolve before:** Checkpoint 8 (Production Hardening).
+
+## Rules for Debugging and Recovery
+
+### How Claude should behave when something breaks
+1. Say "I don't know" upfront if the cause is unclear — never pretend to be certain
+2. Diagnose by isolation — test each component alone before combining
+3. If 2 attempts fail, stop and explain the options clearly before trying more
+4. Never apply a fix that destroys previously working code without a recovery point first
+
+### Recovery points — do this before any risky change
+Before modifying a working file, always create a checkpoint commit:
+```bash
+git add .
+git commit -m "recovery point: before changing [filename]"
+```
+If the change breaks things, recover with:
+```bash
+git checkout HEAD~1 -- [filename]
+```
+This restores the previous version of just that file without losing other work.
+
+### When to stop experimenting
+If the same error persists after 2 different fixes — stop, document the issue 
+in Known Issues, apply the safest workaround, and move forward. 
+Do not let one unresolved issue block the entire learning path.
