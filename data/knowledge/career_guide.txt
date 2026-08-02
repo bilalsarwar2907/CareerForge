@@ -1,0 +1,32 @@
+Career Guide for Software Developers
+
+INTERVIEWS
+Technical interviews typically consist of coding challenges, system design questions, and behavioral questions. 
+For coding challenges, practice data structures and algorithms on platforms like LeetCode and HackerRank.
+System design interviews test your ability to design scalable systems. Study topics like load balancing, caching, databases, and microservices.
+Behavioral interviews use the STAR method: Situation, Task, Action, Result. Prepare 5-6 stories from your experience.
+
+CV WRITING
+A strong developer CV should be one or two pages maximum.
+List your most recent experience first. Include the company name, your role, dates, and 3-4 bullet points of achievements.
+Quantify achievements where possible. Instead of "improved performance" write "reduced API response time by 40%".
+Include a skills section listing your programming languages, frameworks, databases, and tools.
+Always tailor your CV to the job description. Mirror the keywords from the job posting.
+
+SKILL GAPS
+If you are a backend developer wanting to move into full stack, learn React or Vue.js.
+If you lack cloud experience, get an AWS or Azure certification. The AWS Cloud Practitioner is the easiest entry point.
+For Python developers, FastAPI is the most in-demand framework in 2026. Django is still widely used for larger applications.
+PostgreSQL is the most commonly required database for backend roles. Learn it thoroughly including indexing and query optimization.
+
+SALARY NEGOTIATION
+Always negotiate. The first offer is rarely the best offer.
+Research market rates on Glassdoor, LinkedIn Salary, and levels.fyi before any negotiation.
+Never give a number first. Ask what the budgeted range is for the role.
+If the salary is fixed, negotiate other benefits: remote work days, equipment budget, conference allowance, or extra vacation days.
+
+JOB SEARCH STRATEGY
+Apply to roles where you meet 70% of the requirements. Do not wait until you meet 100%.
+Referrals are 10 times more effective than cold applications. Reach out to your network first.
+Follow up on applications after one week with a short polite email.
+LinkedIn is the most important platform for developer job search. Keep your profile updated and set yourself to Open to Work.
