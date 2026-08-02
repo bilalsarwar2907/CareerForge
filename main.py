@@ -8,7 +8,10 @@ def analyze_cv(cv_text: str) -> dict:
 
 
 if __name__ == "__main__":
-    cv = input("Paste CV text:\n")
-    result = analyze_cv(cv)
-    import json
-    print(json.dumps(result, indent=2))
+    try:
+        cv = input("Paste CV text:\n")
+        result = analyze_cv(cv)
+        import json
+        print(json.dumps(result, indent=2))
+    except EOFError:
+        print("Running in non-interactive mode. Use Streamlit UI or workflow.py instead.")
