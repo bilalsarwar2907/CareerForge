@@ -1,6 +1,8 @@
 services:
-  career-forge:
+  careerforge:
     build: .
+    ports:
+      - "8888:8888"
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
