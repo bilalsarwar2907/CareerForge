@@ -19,6 +19,60 @@ _bm25_corpus = []
 _bm25_metadata = []
 _bm25_index = None
 
+import json
+
+INDEX_DIR = "data/rag_index"
+
+
+def save_index():
+    """Persist vector store and BM25 corpus to disk."""
+    os.makedirs(INDEX_DIR, exist_ok=True)
+
+    # Save embeddings as numpy array
+    if _vector_store:
+        embeddings = np.array([item["embedding"] for item in _vector_store])
+        np.save(f"{INDEX_DIR}/embeddings.npy", embeddings)
+
+        # Save metadata (text, source, chunk) as JSON
+        metadata = [{"text": item["text"], "source": item["source"], "chunk": item["chunk"]}
+                    for item in _vector_store]
+        with open(f"{INDEX_DIR}/metadata.json", "w") as f:
+            json.dump(metadata, f)
+
+    print(f"[RAG] Index saved ({len(_vector_store)} chunks)")
+
+
+def load_index():
+    """Load vector store and BM25 corpus from disk if it exists."""
+    global _bm25_index
+
+    emb_path = f"{INDEX_DIR}/embeddings.npy"
+    meta_path = f"{INDEX_DIR}/metadata.json"
+
+    if not (os.path.exists(emb_path) and os.path.exists(meta_path)):
+        print("[RAG] No saved index found — starting fresh")
+        return False
+
+    embeddings = np.load(emb_path)
+    with open(meta_path) as f:
+        metadata = json.load(f)
+
+    for i, item in enumerate(metadata):
+        _vector_store.append({
+            "text": item["text"],
+            "embedding": embeddings[i],
+            "source": item["source"],
+            "chunk": item["chunk"]
+        })
+        _bm25_corpus.append(item["text"])
+        _bm25_metadata.append({"source": item["source"], "chunk_number": item["chunk"]})
+
+    tokenized = [c.lower().split() for c in _bm25_corpus]
+    _bm25_index = BM25Okapi(tokenized)
+
+    print(f"[RAG] Index loaded ({len(_vector_store)} chunks)")
+    return True
+
 
 def sentence_aware_chunk(text: str, max_sentences: int = 5, overlap: int = 1) -> list:
     """Chunk by sentences, not words. Much better for retrieval."""
@@ -59,6 +113,7 @@ def index_document(filepath: str, title: str = None):
     _bm25_index = BM25Okapi(tokenized)
 
     print(f"Indexed {len(chunks)} chunks from '{source}'")
+    save_index()
 
 
 def vector_search(query: str, n: int = 4) -> list:
@@ -137,3 +192,5 @@ Question: {question}"""
         messages=[{"role": "user", "content": prompt}]
     )
     return response.content[0].text
+# Load persisted index on import
+load_index()
