@@ -10,3 +10,8 @@ fastmcp
 streamlit
 pytest
 pytest-mock
+fastapi
+uvicorn[standard]
+python-jose[cryptography]
+passlib[bcrypt]
+httpx
