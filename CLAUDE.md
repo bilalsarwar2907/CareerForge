@@ -49,10 +49,34 @@ Before any risky change: git add . && git commit -m "recovery point: before [cha
 To restore one file: git checkout HEAD~1 -- [filename]
 Stop after 2 failed attempts — document, apply safest workaround, move forward.
 
-## What's Next
-1. Fix ChromaDB persistence (pick one option above)
-2. Add real CV PDF to data/pdfs/ and test full workflow
-3. Expand knowledge base in data/knowledge/
-4. Conversation history — multi-turn memory in main.py
-5. Frontend upgrade — Vue.js + FastAPI
-6. Cloud deploy — Docker image to Azure Container Registry
+## What's Next — FastAPI Migration (Phase 1 priority)
+
+### Phase 1 — FastAPI Backend
+1. Create `api/` directory with `main.py` — FastAPI app, CORS configured
+2. Pydantic models for all request/response shapes (CV, job match, RAG, applications)
+3. Routes: POST /cv/analyze, POST /match, GET /jobs/search, POST /applications, GET /applications, POST /rag/ask
+4. Wire routes to existing business logic — no rewrite, thin HTTP wrappers only
+5. JWT auth middleware (python-jose + passlib) — login/register, protected routes
+6. Test with pytest + httpx alongside Streamlit
+
+### Phase 2 — Persistent RAG
+7. Add save_index() / load_index() to rag.py — numpy .npy + json metadata
+8. Load on startup if exists, rebuild if not
+
+### Phase 3 — Docker
+9. Dockerfile — Python 3.11 base (fixes Python 3.14 threading issues permanently)
+10. docker-compose.yml — FastAPI + volume mount for data/
+11. .dockerignore
+12. Test locally, then push to Azure Container Registry
+
+### Phase 4 — Azure Deploy
+13. Azure Container Registry + Container Apps
+14. Environment variables → Azure secrets
+15. Persistent storage for data/ volume
+
+### Phase 5 — Frontend
+16. Vue 3 + Vite in frontend/
+17. Components per tab, axios for API calls
+18. Streamlit retired
+
+## Run Commands
