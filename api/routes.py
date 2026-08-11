@@ -1,3 +1,5 @@
+from fastapi import APIRouter, HTTPException, Depends
+from api.auth import get_current_user
 from fastapi import APIRouter, HTTPException
 from api.models import (
     CVAnalyzeRequest, CVAnalyzeResponse,
@@ -15,7 +17,7 @@ router = APIRouter()
 
 
 @router.post("/cv/analyze", response_model=CVAnalyzeResponse)
-def analyze_cv(req: CVAnalyzeRequest):
+def analyze_cv(req: CVAnalyzeRequest, current_user: str = Depends(get_current_user)):
     try:
         from prompts import CV_ANALYSIS_PROMPT
         from client import call_claude_json
@@ -55,7 +57,7 @@ def create_application(req: ApplicationCreate):
 
 
 @router.get("/applications", response_model=list[ApplicationRecord])
-def get_applications():
+def get_applications(current_user: str = Depends(get_current_user)):   
     try:
         return list_applications()
     except Exception as e:
