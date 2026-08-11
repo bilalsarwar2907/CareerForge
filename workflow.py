@@ -1,13 +1,9 @@
 import json
-from anthropic import Anthropic
-from config import ANTHROPIC_API_KEY
 from pdf_handler import analyze_cv_pdf
 from rag import index_document, answer_with_rag
 from tools import save_application
 from prompts import MATCH_PROMPT_FINAL
 from client import call_claude_json, call_claude
-
-client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
 def run_career_workflow(cv_path: str, job_description: str) -> dict:
@@ -27,7 +23,7 @@ def run_career_workflow(cv_path: str, job_description: str) -> dict:
     print("\n[3/6] Finding resources for skill gaps...")
     gap_resources = {}
     for gap in match.get("gaps", [])[:3]:
-        resources = answer_with_rag(f"How to learn or demonstrate {gap}?", client)
+        resources = answer_with_rag(f"How to learn or demonstrate {gap}?")
         gap_resources[gap] = resources[:300]
         print(f"  {gap}: found resources")
 
@@ -63,9 +59,7 @@ Keep it under 300 words."""
 
 
 if __name__ == "__main__":
-    job = """
-    We are looking for a Senior Python Developer with experience in FastAPI,
-    PostgreSQL, and Docker. The candidate should have 3+ years of experience
-    building REST APIs and be comfortable with CI/CD pipelines.
-    """
-    run_career_workflow("data/pdfs/Dubai Brochure.pdf", job)
+    # Replace with your actual CV PDF path in data/pdfs/
+    CV_PATH = "data/pdfs/cv.pdf"
+    job = """..."""
+    run_career_workflow(CV_PATH, job)

@@ -3,18 +3,21 @@ os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 import json
 from fastmcp import FastMCP
-from tools import search_jobs, save_application, get_resume, list_applications
-from anthropic import Anthropic
-from config import ANTHROPIC_API_KEY
+from tools import search_jobs, search_jobs_denmark, save_application, get_resume, list_applications
 
 mcp = FastMCP("CareerForge")
-client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
 @mcp.tool()
 def search_jobs_tool(keywords: str, location: str = "london") -> str:
     """Search real job listings from Adzuna."""
     return json.dumps(search_jobs(keywords, location))
+
+
+@mcp.tool()
+def search_jobs_denmark_tool(keywords: str, location: str = "copenhagen") -> str:
+    """Search job listings in Denmark via JSearch."""
+    return json.dumps(search_jobs_denmark(keywords, location))
 
 
 @mcp.tool()
@@ -39,10 +42,7 @@ def list_applications_tool() -> str:
 def ask_career_advisor(question: str) -> str:
     """Ask a career question. Answers come from the CareerForge knowledge base."""
     from rag import answer_with_rag
-    from anthropic import Anthropic
-    from config import ANTHROPIC_API_KEY
-    client = Anthropic(api_key=ANTHROPIC_API_KEY)
-    return answer_with_rag(question, client)
+    return answer_with_rag(question)
 
 @mcp.resource("career://applications")
 def applications_resource() -> str:

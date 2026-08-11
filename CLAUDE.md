@@ -6,77 +6,53 @@ Users upload CVs, match to job descriptions, identify skill gaps, generate cover
 Built checkpoint by checkpoint — nothing discarded, everything extends the previous step.
 
 ## Run Commands
-```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the app
-python main.py
+# Run Streamlit UI
+streamlit run app.py
 
 # Run tests
 python -m pytest tests/ -v
 
-# Run Streamlit UI (Checkpoint 10)
-streamlit run app.py
-```
+# Run MCP server
+python mcp_server.py
 
 ## Architecture Rules
-- `config.py` is the single source of truth — never call `os.getenv()` directly in any other file
-- `client.py` is the ONLY file that calls the Claude API directly
-- All prompts live in `prompts.py` — never write a prompt inline in another file
-- SQLite database at `data/career.db` — never use JSON files for persistent storage
-- All tests in `tests/` — mock all external APIs (Claude, Adzuna)
+- config.py is the single source of truth — never call os.getenv() directly in any other file
+- client.py is the ONLY file that calls the Claude API directly
+- All prompts live in prompts.py — never write a prompt inline in another file
+- SQLite database at data/career.db — never use JSON files for persistent storage
+- All tests in tests/ — mock all external APIs (Claude, Adzuna)
+
+## Current State
+All 11 checkpoints complete (Phase 0 + Checkpoints 1–10).
+Streamlit UI running. 15 tests passing. MCP server connected to Claude Desktop.
+
+## Known Issues
+
+### ChromaDB — Removed
+ChromaDB (both PersistentClient and EphemeralClient) was removed due to Python 3.14 threading incompatibilities.
+RAG now uses a simple numpy cosine-similarity vector store (in-memory list of embeddings).
+Index resets on every restart — same impact as EphemeralClient had.
 
 ## Known Pitfalls
-- `exit 1` does NOT block hooks — use `exit 2` to block
-- `temperature=0` for structured JSON output, higher for creative output
-- JSON parsing: never use raw `json.loads()` — always go through `extract_json()` in client.py
+- exit 1 does NOT block hooks — use exit 2 to block
+- temperature=0 for structured JSON output, higher for creative output
+- JSON parsing: never use raw json.loads() — always go through extract_json() in client.py
+- ChromaDB: removed — do not re-add. Use numpy vector store in rag.py instead.
+- MCP server: import rag lazily inside function body, not at module level
+- rag.py: import client lazily inside answer_with_rag() only — module-level import of client causes hang (Anthropic() init + SentenceTransformer PyTorch threads conflict)
 
-## Current State
-Checkpoint 0 complete — scaffold only. No feature code yet.
-## Current State
-Checkpoint 2 complete — prompt evaluation done, V1 wins at 90% accuracy.
-
-
-
-## What's Next
-Checkpoint 1 — Claude API fundamentals: config.py, client.py, prompts.py, main.py
+## Recovery Protocol
+Before any risky change: git add . && git commit -m "recovery point: before [change]"
+To restore one file: git checkout HEAD~1 -- [filename]
+Stop after 2 failed attempts — document, apply safest workaround, move forward.
 
 ## What's Next
-Checkpoint 3 — Tool calling: tools.py, agent.py, real Adzuna API, SQLite
-
-## Known Issues (Unresolved)
-
-### ChromaDB PersistentClient Hang (Checkpoint 4)
-**Problem:** `chromadb.PersistentClient` hangs indefinitely when `SentenceTransformer` 
-is loaded in the same Python process on this machine (Windows, Python 3.14.3, ChromaDB 0.6.3).
-**Workaround:** Using `EphemeralClient` — index resets on every restart.
-**Impact:** RAG knowledge base is not persistent between sessions.
-**To fix:** Try ChromaDB 0.4.x, or run ChromaDB as a separate server process, 
-or replace with FAISS.
-**Must resolve before:** Checkpoint 8 (Production Hardening).
-
-## Rules for Debugging and Recovery
-
-### How Claude should behave when something breaks
-1. Say "I don't know" upfront if the cause is unclear — never pretend to be certain
-2. Diagnose by isolation — test each component alone before combining
-3. If 2 attempts fail, stop and explain the options clearly before trying more
-4. Never apply a fix that destroys previously working code without a recovery point first
-
-### Recovery points — do this before any risky change
-Before modifying a working file, always create a checkpoint commit:
-```bash
-git add .
-git commit -m "recovery point: before changing [filename]"
-```
-If the change breaks things, recover with:
-```bash
-git checkout HEAD~1 -- [filename]
-```
-This restores the previous version of just that file without losing other work.
-
-### When to stop experimenting
-If the same error persists after 2 different fixes — stop, document the issue 
-in Known Issues, apply the safest workaround, and move forward. 
-Do not let one unresolved issue block the entire learning path.
+1. Fix ChromaDB persistence (pick one option above)
+2. Add real CV PDF to data/pdfs/ and test full workflow
+3. Expand knowledge base in data/knowledge/
+4. Conversation history — multi-turn memory in main.py
+5. Frontend upgrade — Vue.js + FastAPI
+6. Cloud deploy — Docker image to Azure Container Registry

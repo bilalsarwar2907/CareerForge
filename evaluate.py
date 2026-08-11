@@ -65,4 +65,5 @@ def run_all():
     print(f"\nWinner: {winner['prompt']} ({winner['score_accuracy_pct']:.0f}% accuracy)")
 
 
-run_all()
+if __name__ == "__main__":
+    run_all()

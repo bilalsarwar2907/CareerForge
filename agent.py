@@ -1,10 +1,8 @@
 import json
-from anthropic import Anthropic
-from config import ANTHROPIC_API_KEY, SONNET_MODEL
+from config import SONNET_MODEL
+from client import client
 from tools import TOOLS, execute_tool
 from prompts import SYSTEM_PROMPT
-
-client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
 def run_agent(user_message: str):

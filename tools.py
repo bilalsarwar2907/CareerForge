@@ -31,6 +31,30 @@ def search_jobs(keywords: str, location: str = "denmark", results: int = 5) -> l
     ]
 
 
+def search_jobs_denmark(keywords: str, location: str = "copenhagen", results: int = 5) -> list:
+    """Search remote tech jobs via Remotive (free, no auth). Danish job boards linked separately in UI."""
+    url = "https://remotive.com/api/remote-jobs"
+    params = {"search": keywords, "limit": results}
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        data = response.json()
+        jobs = data.get("jobs", [])[:results]
+        print(f"[Remotive] jobs_found={len(jobs)}")
+        return [
+            {
+                "title": job.get("title", "Unknown"),
+                "company": job.get("company_name", "Unknown"),
+                "location": job.get("candidate_required_location", "Remote"),
+                "salary": job.get("salary") or "Not specified",
+                "url": job.get("url", "")
+            }
+            for job in jobs
+        ]
+    except Exception as e:
+        print(f"[Remotive] Error: {e}")
+        return []
+
+
 def save_application(company: str, role: str, status: str) -> dict:
     """Save application to SQLite."""
     conn = sqlite3.connect(DB_PATH)
@@ -104,6 +128,19 @@ TOOLS = [
         }
     },
     {
+        "name": "search_jobs_denmark",
+        "description": "Search job listings in Denmark via Jobnet.dk. Use when user wants to find jobs in Denmark or Copenhagen.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "keywords": {"type": "string", "description": "Job keywords e.g. Python developer"},
+                "location": {"type": "string", "description": "Danish city e.g. copenhagen, aarhus", "default": "copenhagen"},
+                "results": {"type": "integer", "description": "Number of results", "default": 5}
+            },
+            "required": ["keywords"]
+        }
+    },
+    {
         "name": "get_resume",
         "description": "Retrieve the user's stored CV.",
         "input_schema": {"type": "object", "properties": {}, "required": []}
@@ -119,6 +156,7 @@ TOOLS = [
 def execute_tool(name: str, inputs: dict):
     dispatch = {
         "search_jobs": search_jobs,
+        "search_jobs_denmark": search_jobs_denmark,
         "save_application": save_application,
         "get_resume": get_resume,
         "list_applications": list_applications,

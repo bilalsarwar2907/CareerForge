@@ -13,6 +13,9 @@ MAX_TOKENS = int(os.getenv("MAX_TOKENS", 1024))
 ADZUNA_APP_ID = os.getenv("ADZUNA_APP_ID")
 ADZUNA_APP_KEY = os.getenv("ADZUNA_APP_KEY")
 
+# JSearch (OpenWeb Ninja) — for Denmark job search
+JSEARCH_API_KEY = os.getenv("JSEARCH_API_KEY")
+
 # Paths
 DATA_DIR = "data"
 KNOWLEDGE_DIR = f"{DATA_DIR}/knowledge"

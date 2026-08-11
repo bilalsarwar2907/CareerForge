@@ -1,9 +1,6 @@
 import base64
-from anthropic import Anthropic
-from config import ANTHROPIC_API_KEY, SONNET_MODEL
-from client import extract_json
-
-client = Anthropic(api_key=ANTHROPIC_API_KEY)
+from config import SONNET_MODEL
+from client import client, extract_json
 
 
 def analyze_cv_pdf(filepath: str) -> dict:

@@ -1,20 +1,18 @@
 import os
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
 import nltk
-import chromadb
+import numpy as np
 from sentence_transformers import SentenceTransformer
 from rank_bm25 import BM25Okapi
-from anthropic import Anthropic
-from config import ANTHROPIC_API_KEY, CHROMA_DIR, EMBED_MODEL, RETRIEVAL_TOP_K
+from config import EMBED_MODEL, RETRIEVAL_TOP_K
 
 nltk.download("punkt", quiet=True)
 nltk.download("punkt_tab", quiet=True)
 
-# Load embedding model directly
 embedder = SentenceTransformer(EMBED_MODEL)
 
-db = chromadb.EphemeralClient()
-collection = db.get_or_create_collection("career_knowledge")
+# In-memory vector store (replaces ChromaDB)
+_vector_store = []  # list of {"text": str, "embedding": np.array, "source": str, "chunk": int}
 
 # BM25 index kept in memory
 _bm25_corpus = []
@@ -40,22 +38,16 @@ def index_document(filepath: str, title: str = None):
 
     source = title or os.path.basename(filepath)
     chunks = sentence_aware_chunk(text)
+    embeddings = embedder.encode(chunks)
 
-    # Generate embeddings directly
-    embeddings = embedder.encode(chunks).tolist()
-
-    # Index in ChromaDB (vector search)
-    collection.add(
-        documents=chunks,
-        embeddings=embeddings,
-        ids=[f"{source}_chunk_{i}" for i in range(len(chunks))],
-        metadatas=[{
+    # Store in numpy vector store
+    for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+        _vector_store.append({
+            "text": chunk,
+            "embedding": embedding,
             "source": source,
-            "chunk_number": i,
-            "total_chunks": len(chunks),
-            "filepath": filepath
-        } for i in range(len(chunks))]
-    )
+            "chunk": i
+        })
 
     # Add to BM25 corpus (lexical search)
     for i, chunk in enumerate(chunks):
@@ -70,11 +62,23 @@ def index_document(filepath: str, title: str = None):
 
 
 def vector_search(query: str, n: int = 4) -> list:
-    query_embedding = embedder.encode([query]).tolist()
-    results = collection.query(query_embeddings=query_embedding, n_results=n)
+    if not _vector_store:
+        return []
+    query_embedding = embedder.encode([query])[0]
+    scores = [
+        float(np.dot(query_embedding, item["embedding"]) /
+              (np.linalg.norm(query_embedding) * np.linalg.norm(item["embedding"]) + 1e-8))
+        for item in _vector_store
+    ]
+    top_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:n]
     return [
-        {"text": doc, "source": meta["source"], "chunk": meta["chunk_number"], "method": "vector"}
-        for doc, meta in zip(results["documents"][0], results["metadatas"][0])
+        {
+            "text": _vector_store[i]["text"],
+            "source": _vector_store[i]["source"],
+            "chunk": _vector_store[i]["chunk"],
+            "method": "vector"
+        }
+        for i in top_indices
     ]
 
 
@@ -84,8 +88,13 @@ def bm25_search(query: str, n: int = 4) -> list:
     scores = _bm25_index.get_scores(query.lower().split())
     top_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:n]
     return [
-        {"text": _bm25_corpus[i], "source": _bm25_metadata[i]["source"],
-         "chunk": _bm25_metadata[i]["chunk_number"], "method": "bm25", "score": scores[i]}
+        {
+            "text": _bm25_corpus[i],
+            "source": _bm25_metadata[i]["source"],
+            "chunk": _bm25_metadata[i]["chunk_number"],
+            "method": "bm25",
+            "score": scores[i]
+        }
         for i in top_indices if scores[i] > 0
     ]
 
@@ -106,7 +115,8 @@ def hybrid_search(query: str, n: int = 4) -> list:
     return combined[:n]
 
 
-def answer_with_rag(question: str, claude_client) -> str:
+def answer_with_rag(question: str) -> str:
+    from client import client  # lazy import — avoids hang with SentenceTransformer + PyTorch
     chunks = hybrid_search(question, n=RETRIEVAL_TOP_K)
     context = "\n\n".join([
         f"[Source: {c['source']}, chunk {c['chunk']}, method: {c['method']}]\n{c['text']}"
@@ -121,7 +131,6 @@ Documents:
 
 Question: {question}"""
 
-    client = Anthropic(api_key=ANTHROPIC_API_KEY)
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=1024,

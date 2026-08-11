@@ -3,15 +3,11 @@ os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 import streamlit as st
 import json
-from anthropic import Anthropic
-from config import ANTHROPIC_API_KEY
 from main import analyze_cv
-from tools import list_applications, search_jobs
+from tools import list_applications, search_jobs, search_jobs_denmark
 from rag import index_document, answer_with_rag
 from client import call_claude_json
 from prompts import MATCH_PROMPT_FINAL
-
-client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 # Index knowledge base on startup
 if "indexed" not in st.session_state:
@@ -78,10 +74,14 @@ with tab2:
 with tab3:
     st.header("Search Jobs")
     keywords = st.text_input("Keywords:", "Python developer")
-    location = st.text_input("Location:", "london")
+    market = st.radio("Market:", ["Denmark (Remote + Boards)", "UK (Adzuna)"], horizontal=True)
+    location = st.text_input("Location:", "copenhagen" if "Denmark" in market else "london")
     if st.button("Search"):
-        with st.spinner("Searching Adzuna..."):
-            jobs = search_jobs(keywords, location)
+        with st.spinner("Searching..."):
+            if "Denmark" in market:
+                jobs = search_jobs_denmark(keywords, location)
+            else:
+                jobs = search_jobs(keywords, location)
         if jobs:
             for job in jobs:
                 with st.expander(f"{job['title']} — {job['company']}"):
@@ -90,7 +90,18 @@ with tab3:
                     if job.get("url"):
                         st.markdown(f"[View Job]({job['url']})")
         else:
-            st.info("No jobs found. Try different keywords or location.")
+            st.info("No jobs found. Try different keywords.")
+
+        if "Denmark" in market:
+            st.divider()
+            st.markdown("#### 🇩🇰 Search directly on Danish job boards")
+            encoded = keywords.replace(" ", "+")
+            st.markdown(
+                f"- [Jobindex.dk](https://www.jobindex.dk/jobsoegning?q={encoded})\n"
+                f"- [Jobnet.dk](https://job.jobnet.dk/CV/FindWork?SearchString={encoded})\n"
+                f"- [LinkedIn Denmark](https://www.linkedin.com/jobs/search/?keywords={encoded}&location=Denmark)\n"
+                f"- [The Hub (Nordic startups)](https://www.thehub.io/jobs?q={encoded})"
+            )
 
 # Tab 4: Application Tracker
 with tab4:
@@ -120,6 +131,6 @@ with tab5:
             st.write(question)
         with st.chat_message("assistant"):
             with st.spinner("Searching knowledge base..."):
-                answer = answer_with_rag(question, client)
+                answer = answer_with_rag(question)
             st.write(answer)
         st.session_state.chat_history.append({"role": "assistant", "content": answer})
