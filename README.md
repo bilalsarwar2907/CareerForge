@@ -145,3 +145,5 @@ Built an end-to-end AI career assistant using the Anthropic Claude API. It proce
 ## Author
 
 Bilal Sarwar — [github.com/bilalsarwar2907](https://github.com/bilalsarwar2907)
+<img width="1120" height="2240" alt="image_20260923_104554" src="https://github.com/user-attachments/assets/2f8dfe90-ab59-42fc-ba4e-180d4f956056" />
+
