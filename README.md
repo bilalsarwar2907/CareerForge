@@ -138,8 +138,7 @@ Winner: V1 Zero-shot at 90% accuracy on 20 test cases.
 
 ## Portfolio Statement
 
-Built an end-to-end AI career assistant using the Anthropic Claude API. It processes CVs via PDF extraction, scores job matches using prompt-engineered structured outputs with automated evaluation, retrieves career guidance via hybrid vector + BM25 RAG with persistent numpy index, calls real job APIs (Adzuna, Remotive) via tool use, runs a 6-step workflow pipeline, exposes a FastAPI REST backend with JWT authentication, exposes tools via MCP for Claude Desktop integration, and is production-hardened with centralised config, logging, cost tracking, retry logic, mocked pytest coverage, and Docker deployment."I used a pre-trained LLM (Claude) trained self-supervised on huge data, and I added my own small domain knowledge via RAG and prompt engineering, not fine-tuning."
-
+Built an end-to-end AI career assistant using the Anthropic Claude API. It processes CVs via PDF extraction, scores job matches using prompt-engineered structured outputs with automated evaluation, retrieves career guidance via hybrid vector + BM25 RAG with persistent numpy index, calls real job APIs (Adzuna, Remotive) via tool use, runs a 6-step workflow pipeline, exposes a FastAPI REST backend with JWT authentication, exposes tools via MCP for Claude Desktop integration, and is production-hardened with centralised config, logging, cost tracking, retry logic, mocked pytest coverage, and Docker deployment."I used Claude, a model pre-trained self-supervised on huge data to predict next token, I didn't fine-tune it, I added domain knowledge via RAG: sentence chunking → embeddings → vector DB + BM25 hybrid search → retrieval → augmentation → generation, and I evaluated prompts with 20 test cases choosing V1 Zero-shot with 90%."
 ---
 
 ## Author
