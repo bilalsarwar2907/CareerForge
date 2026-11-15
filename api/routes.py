@@ -13,7 +13,7 @@ from rag import answer_with_rag
 from prompts import MATCH_PROMPT_FINAL
 from client import call_claude_json
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @router.post("/cv/analyze", response_model=CVAnalyzeResponse)

@@ -116,3 +116,17 @@ def test_match_characterization(mock_claude):
     prompt = mock_claude.call_args[0][0]
     assert "Python developer" in prompt
     assert "Need Python and Kubernetes" in prompt    
+
+# --- B0.3: every non-public route needs a token ---
+
+@pytest.mark.parametrize("method,path", [
+    ("POST", "/cv/analyze"),
+    ("POST", "/match"),
+    ("GET", "/jobs/search?keywords=python"),
+    ("POST", "/applications"),
+    ("GET", "/applications"),
+    ("POST", "/rag/ask"),
+])
+def test_route_requires_token(method, path):
+    response = client.request(method, path)
+    assert response.status_code == 401    
