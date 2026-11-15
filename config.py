@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,11 +18,12 @@ ADZUNA_APP_KEY = os.getenv("ADZUNA_APP_KEY")
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
 
-# Paths
-DATA_DIR = "data"
-KNOWLEDGE_DIR = f"{DATA_DIR}/knowledge"
-DB_PATH = f"{DATA_DIR}/career.db"
-LOG_PATH = "logs/app.log"
+# Paths — built from this file's folder, not the current working directory (bug 11)
+PROJECT_ROOT = Path(__file__).resolve().parent
+DATA_DIR = PROJECT_ROOT / "data"
+KNOWLEDGE_DIR = DATA_DIR / "knowledge"
+DB_PATH = DATA_DIR / "career.db"
+LOG_PATH = PROJECT_ROOT / "logs" / "app.log"
 
 # RAG
 CHUNK_MAX_SENTENCES = 5
