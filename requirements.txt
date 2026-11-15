@@ -13,4 +13,5 @@ fastapi
 uvicorn[standard]
 python-jose[cryptography]
 passlib[bcrypt]
+bcrypt<5.0  # passlib 1.7.4 breaks with bcrypt 5 (72-byte self-test). Remove when passlib is replaced.
 httpx
