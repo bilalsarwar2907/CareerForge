@@ -3,7 +3,7 @@ import json
 import sqlite3
 import requests
 from datetime import datetime
-from config import ADZUNA_APP_ID, ADZUNA_APP_KEY, DB_PATH
+from config import ADZUNA_APP_ID, ADZUNA_APP_KEY, DB_PATH, DATA_DIR
 
 
 def search_jobs(keywords: str, location: str = "london", results: int = 5) -> list:
@@ -77,7 +77,7 @@ def save_application(company: str, role: str, status: str) -> dict:
 def get_resume() -> str:
     """Return stored CV text."""
     try:
-        with open("data/cv.txt") as f:
+        with open(DATA_DIR / "cv.txt") as f:
             return f.read()
     except FileNotFoundError:
         return "No CV stored. Please upload one first."

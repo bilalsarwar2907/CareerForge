@@ -1,12 +1,13 @@
 import logging
 import json
 from datetime import datetime
+from config import LOG_PATH
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s",
     handlers=[
-        logging.FileHandler("logs/app.log"),
+        logging.FileHandler(LOG_PATH),
         logging.StreamHandler()
     ]
 )
