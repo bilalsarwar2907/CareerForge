@@ -36,7 +36,8 @@ def analyze_cv_pdf(filepath: str) -> dict:
             ]
         }]
     )
-    return extract_json(response.content[0].text)
+    text = next(b.text for b in response.content if b.type == "text")
+    return extract_json(text)
 
 
 def measure_prompt_caching(system_prompt: str, user_message: str) -> list:
