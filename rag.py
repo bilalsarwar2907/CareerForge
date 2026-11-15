@@ -91,6 +91,9 @@ def index_document(filepath: str, title: str = None):
         text = f.read()
 
     source = title or os.path.basename(filepath)
+    if any(item["source"] == source for item in _vector_store):
+        print(f"[RAG] '{source}' already indexed — skipping")
+        return
     chunks = sentence_aware_chunk(text)
     embeddings = embedder.encode(chunks)
 
