@@ -129,7 +129,7 @@ TOOLS = [
     },
     {
         "name": "search_jobs_denmark",
-        "description": "Search job listings in Denmark via Jobnet.dk. Use when user wants to find jobs in Denmark or Copenhagen.",
+       "description": "Search remote tech jobs via Remotive (remote-only, not Danish job boards). Use when user wants remote jobs they can do from Denmark.",
         "input_schema": {
             "type": "object",
             "properties": {

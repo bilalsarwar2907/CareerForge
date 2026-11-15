@@ -16,7 +16,7 @@ def search_jobs_tool(keywords: str, location: str = "london") -> str:
 
 @mcp.tool()
 def search_jobs_denmark_tool(keywords: str, location: str = "copenhagen") -> str:
-    """Search job listings in Denmark via JSearch."""
+    """Search remote tech jobs via Remotive (remote-only, not Danish job boards)."""
     return json.dumps(search_jobs_denmark(keywords, location))
 
 
