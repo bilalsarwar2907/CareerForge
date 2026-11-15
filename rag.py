@@ -9,13 +9,7 @@ from config import EMBED_MODEL, RETRIEVAL_TOP_K
 nltk.download("punkt", quiet=True)
 nltk.download("punkt_tab", quiet=True)
 
-_embedder = None
-
-def get_embedder():
-    global _embedder
-    if _embedder is None:
-        _embedder = SentenceTransformer(EMBED_MODEL)
-    return _embedder
+embedder = SentenceTransformer(EMBED_MODEL)  # loads immediately
 
 # In-memory vector store (replaces ChromaDB)
 _vector_store = []  # list of {"text": str, "embedding": np.array, "source": str, "chunk": int}
