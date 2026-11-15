@@ -1,16 +1,6 @@
-import os
 import pytest
 from unittest.mock import patch, MagicMock
 from tools import save_application, list_applications, get_resume, search_jobs
-
-
-def setup_function():
-    os.environ["DB_PATH"] = "data/test_career.db"
-
-
-def teardown_function():
-    if os.path.exists("data/test_career.db"):
-        os.remove("data/test_career.db")
 
 
 def test_save_and_list():
