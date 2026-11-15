@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
 from api.auth import get_current_user
-from fastapi import APIRouter, HTTPException
 from api.models import (
     CVAnalyzeRequest, CVAnalyzeResponse,
     MatchRequest, MatchResponse,

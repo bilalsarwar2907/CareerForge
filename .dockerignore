@@ -5,5 +5,4 @@ __pycache__/
 .git
 .pytest_cache
 logs/
-data/chroma/
 data/career.db

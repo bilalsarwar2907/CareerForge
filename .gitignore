@@ -1,7 +1,13 @@
 .env
 __pycache__/
 *.pyc
-data/chroma/
 data/career.db
 logs/
 data/rag_index/
+
+# Generated output (written by workflow.py / evaluate.py)
+data/latest_report.json
+data/eval_*.csv
+
+# Personal documents (CVs, PDFs) - never commit
+data/pdfs/

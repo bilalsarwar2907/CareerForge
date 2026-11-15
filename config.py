@@ -16,13 +16,10 @@ ADZUNA_APP_KEY = os.getenv("ADZUNA_APP_KEY")
 # API auth (no default on purpose — must come from .env)
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
-# JSearch (OpenWeb Ninja) — for Denmark job search
-JSEARCH_API_KEY = os.getenv("JSEARCH_API_KEY")
 
 # Paths
 DATA_DIR = "data"
 KNOWLEDGE_DIR = f"{DATA_DIR}/knowledge"
-CHROMA_DIR = f"{DATA_DIR}/chroma"
 DB_PATH = f"{DATA_DIR}/career.db"
 LOG_PATH = "logs/app.log"
 
