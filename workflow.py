@@ -2,8 +2,9 @@ import json
 from pdf_handler import analyze_cv_pdf
 from rag import index_document, answer_with_rag
 from tools import save_application
-from prompts import MATCH_PROMPT_FINAL
+from prompts import MATCH_PROMPT_FINAL, JOB_INFO_PROMPT
 from client import call_claude_json, call_claude
+
 
 
 def run_career_workflow(cv_path: str, job_description: str) -> dict:
@@ -36,11 +37,11 @@ Keep it under 300 words."""
     cover_letter = call_claude(cover_prompt, stream=True)
 
     print("\n[5/6] Saving application...")
-    save_application(
-        company="Extracted from JD",
-        role="Applied Role",
-        status="applied"
-    )
+    job_info = call_claude_json(JOB_INFO_PROMPT.format(job_text=job_description))
+    company = job_info.get("company", "Unknown")
+    role = job_info.get("role", "Unknown")
+    save_application(company=company, role=role, status="applied")
+    print(f"  Saved: {role} at {company}")
 
     print("\n[6/6] Saving report...")
     report = {
@@ -56,7 +57,6 @@ Keep it under 300 words."""
 
     print(f"\n✅ Complete. Score: {match.get('score')}. Report saved.")
     return report
-
 
 if __name__ == "__main__":
     # Replace with your actual CV PDF path in data/pdfs/

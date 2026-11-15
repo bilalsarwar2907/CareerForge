@@ -61,3 +61,9 @@ PROMPT_REGISTRY = {
     "match_v3": MATCH_PROMPT_V3,
 }
 MATCH_PROMPT_FINAL = MATCH_PROMPT_V1  # Winner: 90% accuracy on 20 test cases
+JOB_INFO_PROMPT = """
+Extract the company name and job title from this job description. Return JSON only.
+Job: {job_text}
+Return: {{"company": "", "role": ""}}
+If a value is not stated, use "Unknown".
+"""
