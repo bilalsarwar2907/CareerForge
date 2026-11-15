@@ -1,0 +1,12 @@
+# Line endings: store text files with LF in the repo; Git converts on checkout.
+* text=auto
+
+# Shell scripts must stay LF (they run in Linux / Docker / hooks)
+*.sh text eol=lf
+
+# Binary files: never convert
+*.pdf binary
+*.npy binary
+*.db binary
+*.png binary
+*.jpg binary
