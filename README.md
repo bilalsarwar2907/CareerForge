@@ -92,13 +92,16 @@ cd CareerForge
 pip install -r requirements.txt
 ```
 
-Create `.env`:
+Create `.env` (copy `.env.example`):
 ```
 ANTHROPIC_API_KEY=your_key_here
 DEFAULT_MODEL=claude-haiku-4-5-20251001
 ADZUNA_APP_ID=your_app_id
 ADZUNA_APP_KEY=your_app_key
+JWT_SECRET_KEY=generate_your_own
 ```
+
+Generate `JWT_SECRET_KEY` with `python -c "import secrets; print(secrets.token_urlsafe(32))"`. The API refuses to start without it.
 
 Run the FastAPI backend:
 ```bash

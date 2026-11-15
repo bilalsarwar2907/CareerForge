@@ -4,9 +4,11 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import sqlite3
-from config import DB_PATH
+from config import DB_PATH, JWT_SECRET_KEY
 
-SECRET_KEY = "careerforge-secret-change-in-production"
+if not JWT_SECRET_KEY:
+    raise RuntimeError("JWT_SECRET_KEY is not set. Add it to .env (see .env.example).")
+SECRET_KEY = JWT_SECRET_KEY
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

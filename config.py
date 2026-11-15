@@ -13,6 +13,9 @@ MAX_TOKENS = int(os.getenv("MAX_TOKENS", 1024))
 ADZUNA_APP_ID = os.getenv("ADZUNA_APP_ID")
 ADZUNA_APP_KEY = os.getenv("ADZUNA_APP_KEY")
 
+# API auth (no default on purpose — must come from .env)
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+
 # JSearch (OpenWeb Ninja) — for Denmark job search
 JSEARCH_API_KEY = os.getenv("JSEARCH_API_KEY")
 

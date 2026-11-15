@@ -1,3 +1,6 @@
+import os
+os.environ.setdefault("JWT_SECRET_KEY", "test-only-secret")
+
 import pytest
 import tools
 import api.auth
