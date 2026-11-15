@@ -4,3 +4,4 @@ __pycache__/
 data/chroma/
 data/career.db
 logs/
+data/rag_index/
