@@ -95,3 +95,24 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
+
+# --- Characterization: /match (locks current behaviour before restructure) ---
+
+from unittest.mock import patch
+
+FAKE_MATCH = {"score": 75, "strengths": ["Python"], "gaps": ["Kubernetes"]}
+
+
+@patch("api.routes.call_claude_json", return_value=FAKE_MATCH)
+def test_match_characterization(mock_claude):
+    token = get_token()
+    response = client.post(
+        "/match",
+        json={"cv_text": "Python developer", "job_description": "Need Python and Kubernetes"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 200
+    assert response.json() == FAKE_MATCH
+    prompt = mock_claude.call_args[0][0]
+    assert "Python developer" in prompt
+    assert "Need Python and Kubernetes" in prompt    
