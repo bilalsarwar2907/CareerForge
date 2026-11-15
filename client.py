@@ -1,12 +1,10 @@
-import time
-import anthropic
 import json
 import re
 from anthropic import Anthropic
 from logger import log_api_call
 from config import ANTHROPIC_API_KEY, DEFAULT_MODEL
 
-client = Anthropic(api_key=ANTHROPIC_API_KEY)
+client = Anthropic(api_key=ANTHROPIC_API_KEY, max_retries=3)
 
 
 def extract_json(text: str) -> dict:
@@ -50,22 +48,6 @@ def repair_json(broken_text: str) -> dict:
     repaired = response.content[0].text.strip()
     return json.loads(repaired)
 
-def call_with_retry(max_retries: int = 3, **kwargs):
-    """Call Claude API with automatic retry on rate limit errors."""
-    for attempt in range(max_retries):
-        try:
-            response = client.messages.create(**kwargs)
-        except anthropic.RateLimitError:
-            wait = 2 ** attempt
-            print(f"Rate limited. Retry {attempt+1}/{max_retries} in {wait}s")
-            time.sleep(wait)
-        except anthropic.APIStatusError as e:
-            print(f"API error {e.status_code}: {e.message}")
-            if attempt == max_retries - 1:
-                raise
-    raise RuntimeError("Max retries exceeded")
-
-
 def call_claude(prompt: str, system: str = "", max_tokens: int = 1024,
                 temperature: float = 0, stream: bool = False) -> str:
     """Single place for all Claude calls. Returns text."""
@@ -91,7 +73,6 @@ def call_claude(prompt: str, system: str = "", max_tokens: int = 1024,
     log_api_call("call_claude", response.usage)
     return response.content[0].text
     
-
 
 def call_claude_json(prompt: str, system: str = "", max_tokens: int = 1024) -> dict:
     """Call Claude and always return a validated dict."""
