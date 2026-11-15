@@ -6,8 +6,8 @@ from datetime import datetime
 from config import ADZUNA_APP_ID, ADZUNA_APP_KEY, DB_PATH
 
 
-def search_jobs(keywords: str, location: str = "denmark", results: int = 5) -> list:
-    """Search real jobs via Adzuna API."""
+def search_jobs(keywords: str, location: str = "london", results: int = 5) -> list:
+    """Search UK jobs via Adzuna API (gb endpoint)."""
     url = "https://api.adzuna.com/v1/api/jobs/gb/search/1"
     params = {
         "app_id": ADZUNA_APP_ID,
@@ -103,12 +103,12 @@ def list_applications() -> list:
 TOOLS = [
     {
         "name": "search_jobs",
-        "description": "Search real job listings. Use when user wants to find jobs.",
+        "description": "Search UK job listings via Adzuna. Use only for jobs in the United Kingdom.",
         "input_schema": {
             "type": "object",
             "properties": {
                 "keywords": {"type": "string", "description": "Job keywords e.g. Python backend"},
-                "location": {"type": "string", "description": "Country or city", "default": "denmark"},
+                "location": {"type": "string", "description": "UK city e.g. london, manchester", "default": "london"},
                 "results": {"type": "integer", "description": "Number of results", "default": 5}
             },
             "required": ["keywords"]
