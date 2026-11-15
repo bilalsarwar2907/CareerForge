@@ -19,3 +19,9 @@ def test_extract_nested_json():
     text = '{"score": 90, "strengths": ["Python", "FastAPI"], "gaps": []}'
     result = extract_json(text)
     assert result["strengths"] == ["Python", "FastAPI"]
+
+def test_repair_handles_fenced_reply(mocker):
+    fake = mocker.Mock()
+    fake.content = [mocker.Mock(text='```json\n{"score": 70}\n```')]
+    mocker.patch("client.client.messages.create", return_value=fake)
+    assert extract_json("not json at all") == {"score": 70}    

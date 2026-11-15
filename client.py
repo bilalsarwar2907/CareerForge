@@ -7,7 +7,7 @@ from config import ANTHROPIC_API_KEY, DEFAULT_MODEL
 client = Anthropic(api_key=ANTHROPIC_API_KEY, max_retries=3)
 
 
-def extract_json(text: str) -> dict:
+def extract_json(text: str, allow_repair: bool = True) -> dict:
     """Extract JSON from Claude's response. Handles markdown fences and extra prose."""
     # Try direct parse first
     try:
@@ -31,8 +31,11 @@ def extract_json(text: str) -> dict:
         except json.JSONDecodeError:
             pass
 
-    # Ask Claude to repair the JSON
-    return repair_json(text)
+    if allow_repair:
+        # Ask Claude to repair the JSON
+        return repair_json(text)
+
+    raise ValueError("Could not extract JSON from Claude response")
 
 
 def repair_json(broken_text: str) -> dict:
@@ -46,7 +49,7 @@ def repair_json(broken_text: str) -> dict:
         }]
     )
     repaired = response.content[0].text.strip()
-    return json.loads(repaired)
+    return extract_json(repaired, allow_repair=False)
 
 def call_claude(prompt: str, system: str = "", max_tokens: int = 1024,
                 temperature: float = 0, stream: bool = False) -> str:
