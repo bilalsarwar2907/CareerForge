@@ -1,4 +1,4 @@
-anthropic
+anthropic==0.116.0  # 2.x removed temperature from messages.create (bug 15). Upgrade in Step D.
 python-dotenv
 requests
 sentence-transformers
