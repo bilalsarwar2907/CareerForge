@@ -8,15 +8,16 @@ Built checkpoint by checkpoint — nothing discarded, everything extends the pre
 ## Run Commands
 # Install dependencies
 pip install -r requirements.txt
+pip install -e .
 
 # Run Streamlit UI
-streamlit run app.py
+python -m streamlit run interfaces/streamlit_app.py
 
 # Run tests
 python -m pytest tests/ -v
 
 # Run MCP server
-python mcp_server.py
+python interfaces/mcp_server.py
 
 ## Architecture Rules
 - config.py is the single source of truth — never call os.getenv() directly in any other file

@@ -1,4 +1,4 @@
-from client import extract_json
+from careerforge.core.client import extract_json
 
 
 def test_extract_clean_json():
@@ -23,5 +23,5 @@ def test_extract_nested_json():
 def test_repair_handles_fenced_reply(mocker):
     fake = mocker.Mock()
     fake.content = [mocker.Mock(text='```json\n{"score": 70}\n```')]
-    mocker.patch("client.client.messages.create", return_value=fake)
+    mocker.patch("careerforge.core.client.client.messages.create", return_value=fake)
     assert extract_json("not json at all") == {"score": 70}    

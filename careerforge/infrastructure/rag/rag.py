@@ -4,7 +4,7 @@ import nltk
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from rank_bm25 import BM25Okapi
-from config import EMBED_MODEL, RETRIEVAL_TOP_K
+from careerforge.core.config import EMBED_MODEL, RETRIEVAL_TOP_K
 
 nltk.download("punkt", quiet=True)
 nltk.download("punkt_tab", quiet=True)
@@ -174,7 +174,7 @@ def hybrid_search(query: str, n: int = 4) -> list:
 
 
 def answer_with_rag(question: str) -> str:
-    from client import client  # lazy import — avoids hang with SentenceTransformer + PyTorch
+    from careerforge.core.client import client  # lazy import — avoids hang with SentenceTransformer + PyTorch
     chunks = hybrid_search(question, n=RETRIEVAL_TOP_K)
     context = "\n\n".join([
         f"[Source: {c['source']}, chunk {c['chunk']}, method: {c['method']}]\n{c['text']}"

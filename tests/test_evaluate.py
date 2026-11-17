@@ -1,9 +1,9 @@
 from unittest.mock import patch
-from evaluate import evaluate_prompt
-from prompts import MATCH_PROMPT_V1
+from scripts.evaluate import evaluate_prompt
+from careerforge.prompts import MATCH_PROMPT_V1
 
 
-@patch("evaluate.call_claude_json")
+@patch("scripts.evaluate.call_claude_json")
 def test_evaluate_prompt_mocked(mock_call):
     """Claude API is mocked — no real API call."""
     mock_call.return_value = {"score": 85, "strengths": ["Python"], "gaps": []}
@@ -20,7 +20,7 @@ def test_evaluate_prompt_mocked(mock_call):
     mock_call.assert_called_once()
 
 
-@patch("evaluate.call_claude_json")
+@patch("scripts.evaluate.call_claude_json")
 def test_evaluate_prompt_out_of_range(mock_call):
     """Score outside expected range = 0% accuracy."""
     mock_call.return_value = {"score": 20, "strengths": [], "gaps": []}
@@ -35,7 +35,8 @@ def test_evaluate_prompt_out_of_range(mock_call):
     assert result["score_accuracy_pct"] == 0
 
 
-@patch("evaluate.call_claude_json")
+
+@patch("scripts.evaluate.call_claude_json")
 def test_evaluate_prompt_missing_fields(mock_call):
     """Missing fields = has_fields_pct 0%."""
     mock_call.return_value = {"score": 85}

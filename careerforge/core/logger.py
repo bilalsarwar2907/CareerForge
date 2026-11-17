@@ -1,7 +1,7 @@
 import logging
 import json
 from datetime import datetime
-from config import LOG_PATH
+from careerforge.core.config import LOG_PATH
 
 logging.basicConfig(
     level=logging.INFO,

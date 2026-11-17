@@ -1,8 +1,8 @@
 import json
 import re
 from anthropic import Anthropic
-from logger import log_api_call
-from config import ANTHROPIC_API_KEY, DEFAULT_MODEL
+from careerforge.core.logger import log_api_call
+from careerforge.core.config import ANTHROPIC_API_KEY, DEFAULT_MODEL
 
 client = Anthropic(api_key=ANTHROPIC_API_KEY, max_retries=3)
 

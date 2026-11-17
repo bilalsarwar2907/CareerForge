@@ -19,7 +19,7 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
 
 # Paths — built from this file's folder, not the current working directory (bug 11)
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data"
 KNOWLEDGE_DIR = DATA_DIR / "knowledge"
 DB_PATH = DATA_DIR / "career.db"

@@ -3,7 +3,7 @@ import json
 import sqlite3
 import requests
 from datetime import datetime
-from config import ADZUNA_APP_ID, ADZUNA_APP_KEY, DB_PATH, DATA_DIR
+from careerforge.core.config import ADZUNA_APP_ID, ADZUNA_APP_KEY, DB_PATH, DATA_DIR
 
 
 def search_jobs(keywords: str, location: str = "london", results: int = 5) -> list:

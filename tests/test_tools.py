@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from tools import save_application, list_applications, get_resume, search_jobs
+from careerforge.infrastructure.tools import save_application, list_applications, get_resume, search_jobs
 
 
 def test_save_and_list():
@@ -17,12 +17,12 @@ def test_save_application_returns_count():
 
 
 def test_get_resume_missing(tmp_path, monkeypatch):
-    monkeypatch.setattr("tools.get_resume", lambda: "No CV stored. Please upload one first.")
+    monkeypatch.setattr("careerforge.infrastructure.tools.get_resume", lambda: "No CV stored. Please upload one first.")
     result = get_resume()
     assert isinstance(result, str)
 
 
-@patch("tools.requests.get")
+@patch("careerforge.infrastructure.tools.requests.get")
 def test_search_jobs_mocked(mock_get):
     """Adzuna API is mocked — no real HTTP call."""
     mock_get.return_value = MagicMock(json=lambda: {

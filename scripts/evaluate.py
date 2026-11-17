@@ -1,8 +1,8 @@
 import json
 import csv
 from datetime import datetime
-from client import call_claude_json
-from prompts import MATCH_PROMPT_V1, MATCH_PROMPT_V2, MATCH_PROMPT_V3
+from careerforge.core.client import call_claude_json
+from careerforge.prompts import MATCH_PROMPT_V1, MATCH_PROMPT_V2, MATCH_PROMPT_V3
 
 PROMPTS = {
     "v1_zeroshot": MATCH_PROMPT_V1,

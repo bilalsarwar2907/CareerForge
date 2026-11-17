@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "careerforge"
+version = "0.1.0"
+description = "AI career assistant: CV analysis, job matching, RAG, MCP"
+requires-python = ">=3.11"
+# Dependencies stay in requirements.txt for now (pinning = Step D).
+
+[tool.setuptools.packages.find]
+include = ["careerforge*", "interfaces*"]

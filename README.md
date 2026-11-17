@@ -39,27 +39,33 @@ Built checkpoint by checkpoint as a structured learning project. Every feature i
 
 ```
 CareerForge/
-├── config.py          — single source of truth for all settings
-├── client.py          — only file that calls the Claude API directly
-├── prompts.py         — all prompts, versioned and evaluated
-├── tools.py           — tool definitions + Adzuna/Remotive API + SQLite
-├── agent.py           — tool-calling agent loop
-├── rag.py             — sentence chunking, numpy vector store, BM25, hybrid search
-├── pdf_handler.py     — PDF extraction + prompt caching
-├── workflow.py        — 6-step deterministic pipeline
-├── mcp_server.py      — FastMCP server for Claude Desktop
-├── logger.py          — API call logging with cost tracking
-├── evaluate.py        — prompt evaluation with CSV output
-├── app.py             — Streamlit UI
-├── api/
-│   ├── main.py        — FastAPI app + CORS middleware
-│   ├── models.py      — Pydantic request/response models
-│   ├── routes.py      — REST routes wired to business logic
-│   ├── auth.py        — JWT auth, bcrypt, HTTPBearer
-│   └── auth_routes.py — /auth/register + /auth/login
-└── tests/
-    ├── test_*.py      — 15 unit tests (mocked APIs)
-    └── test_api.py    — 8 FastAPI integration tests
+├── careerforge/                 — core logic (no UI code)
+│   ├── core/
+│   │   ├── config.py            — single source of truth for all settings
+│   │   ├── client.py            — only file that calls the Claude API directly
+│   │   └── logger.py            — API call logging with cost tracking
+│   ├── prompts.py               — all prompts, versioned and evaluated
+│   ├── services/
+│   │   ├── workflow.py          — 6-step deterministic pipeline
+│   │   ├── cv_analysis.py       — CV analysis
+│   │   └── agent.py             — tool-calling agent loop
+│   └── infrastructure/
+│       ├── tools.py             — tool definitions + Adzuna/Remotive API + SQLite
+│       ├── pdf_handler.py       — PDF extraction + prompt caching
+│       └── rag/rag.py           — sentence chunking, numpy vector store, BM25, hybrid search
+├── interfaces/                  — ways to use CareerForge
+│   ├── api/
+│   │   ├── main.py              — FastAPI app + CORS middleware
+│   │   ├── models.py            — Pydantic request/response models
+│   │   ├── routes.py            — REST routes wired to business logic
+│   │   ├── auth.py              — JWT auth, bcrypt, HTTPBearer
+│   │   └── auth_routes.py       — /auth/register + /auth/login
+│   ├── streamlit_app.py         — Streamlit UI
+│   └── mcp_server.py            — FastMCP server for Claude Desktop
+├── scripts/
+│   └── evaluate.py              — prompt evaluation with CSV output
+├── tests/                       — pytest (Claude API mocked)
+└── pyproject.toml               — makes careerforge + interfaces installable (pip install -e .)
 ```
 
 ---
@@ -90,6 +96,7 @@ CareerForge/
 git clone https://github.com/bilalsarwar2907/CareerForge.git
 cd CareerForge
 pip install -r requirements.txt
+pip install -e .
 ```
 
 Create `.env` (copy `.env.example`):
@@ -105,12 +112,12 @@ Generate `JWT_SECRET_KEY` with `python -c "import secrets; print(secrets.token_u
 
 Run the FastAPI backend:
 ```bash
-python -m uvicorn api.main:app --reload --port 8888
+python -m uvicorn interfaces.api.main:app --reload --port 8888
 ```
 
 Run the Streamlit UI:
 ```bash
-python -m streamlit run app.py
+python -m streamlit run interfaces/streamlit_app.py
 ```
 
 Run tests:

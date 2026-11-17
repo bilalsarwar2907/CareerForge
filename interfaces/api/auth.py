@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import sqlite3
-from config import DB_PATH, JWT_SECRET_KEY
+from careerforge.core.config import DB_PATH, JWT_SECRET_KEY
 
 if not JWT_SECRET_KEY:
     raise RuntimeError("JWT_SECRET_KEY is not set. Add it to .env (see .env.example).")

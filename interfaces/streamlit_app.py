@@ -3,11 +3,11 @@ os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 import streamlit as st
 import json
-from main import analyze_cv
-from tools import list_applications, search_jobs, search_jobs_denmark
-from rag import index_document, answer_with_rag
-from client import call_claude_json
-from prompts import MATCH_PROMPT_FINAL
+from careerforge.services.cv_analysis import analyze_cv
+from careerforge.infrastructure.tools import list_applications, search_jobs, search_jobs_denmark
+from careerforge.infrastructure.rag.rag import index_document, answer_with_rag
+from careerforge.core.client import call_claude_json
+from careerforge.prompts import MATCH_PROMPT_FINAL
 
 # Index knowledge base on startup
 if "indexed" not in st.session_state:

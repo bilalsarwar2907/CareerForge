@@ -1,8 +1,8 @@
 import json
-from config import SONNET_MODEL
-from client import client
-from tools import TOOLS, execute_tool
-from prompts import SYSTEM_PROMPT
+from careerforge.core.config import SONNET_MODEL
+from careerforge.core.client import client
+from careerforge.infrastructure.tools import TOOLS, execute_tool
+from careerforge.prompts import SYSTEM_PROMPT
 
 
 def run_agent(user_message: str):
