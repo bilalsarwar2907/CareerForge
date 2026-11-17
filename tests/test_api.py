@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from interfaces.api.main import app
+from careerforge.api.main import app
 
 client = TestClient(app)
 
@@ -103,7 +103,7 @@ from unittest.mock import patch
 FAKE_MATCH = {"score": 75, "strengths": ["Python"], "gaps": ["Kubernetes"]}
 
 
-@patch("interfaces.api.routes.call_claude_json", return_value=FAKE_MATCH)
+@patch("careerforge.api.routes.call_claude_json", return_value=FAKE_MATCH)
 def test_match_characterization(mock_claude):
     token = get_token()
     response = client.post(

@@ -1,4 +1,4 @@
-from careerforge.infrastructure.rag.rag import sentence_aware_chunk
+from careerforge.rag.rag import sentence_aware_chunk
 
 
 def test_chunking_returns_list():

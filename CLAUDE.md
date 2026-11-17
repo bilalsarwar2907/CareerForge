@@ -11,13 +11,13 @@ pip install -r requirements.txt
 pip install -e .
 
 # Run Streamlit UI
-python -m streamlit run interfaces/streamlit_app.py
+python -m streamlit run careerforge/ui/app.py
 
 # Run tests
 python -m pytest tests/ -v
 
 # Run MCP server
-python interfaces/mcp_server.py
+python careerforge/mcp/server.py
 
 ## Architecture Rules
 - config.py is the single source of truth — never call os.getenv() directly in any other file

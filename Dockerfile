@@ -11,4 +11,4 @@ RUN mkdir -p data/knowledge data/pdfs data/rag_index logs
 
 EXPOSE 8888
 
-CMD ["python", "-m", "uvicorn", "interfaces.api.main:app", "--host", "0.0.0.0", "--port", "8888"]
+CMD ["python", "-m", "uvicorn", "careerforge.api.main:app", "--host", "0.0.0.0", "--port", "8888"]

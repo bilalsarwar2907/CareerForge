@@ -3,7 +3,7 @@ os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 import json
 from fastmcp import FastMCP
-from careerforge.infrastructure.tools import search_jobs, search_jobs_denmark, save_application, get_resume, list_applications
+from careerforge.tools.tools import search_jobs, search_jobs_denmark, save_application, get_resume, list_applications
 
 mcp = FastMCP("CareerForge")
 
@@ -41,7 +41,7 @@ def list_applications_tool() -> str:
 @mcp.tool()
 def ask_career_advisor(question: str) -> str:
     """Ask a career question. Answers come from the CareerForge knowledge base."""
-    from careerforge.infrastructure.rag.rag import answer_with_rag
+    from careerforge.rag.rag import answer_with_rag
     return answer_with_rag(question)
 
 @mcp.resource("career://applications")

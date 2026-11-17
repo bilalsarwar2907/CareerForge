@@ -1,5 +1,5 @@
-from careerforge.core.client import call_claude_json, call_claude
-from careerforge.prompts import SYSTEM_PROMPT, CV_ANALYSIS_PROMPT
+from careerforge.llm.client import call_claude_json, call_claude
+from careerforge.llm.prompts import SYSTEM_PROMPT, CV_ANALYSIS_PROMPT
 
 
 def analyze_cv(cv_text: str) -> dict:

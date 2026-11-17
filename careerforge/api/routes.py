@@ -1,16 +1,16 @@
 from fastapi import APIRouter, HTTPException, Depends
-from interfaces.api.auth import get_current_user
-from interfaces.api.models import (
+from careerforge.api.auth import get_current_user
+from careerforge.api.models import (
     CVAnalyzeRequest, CVAnalyzeResponse,
     MatchRequest, MatchResponse,
     JobResult,
     ApplicationCreate, ApplicationRecord,
     RAGRequest, RAGResponse,
 )
-from careerforge.infrastructure.tools import search_jobs_denmark, save_application, list_applications
-from careerforge.infrastructure.rag.rag import answer_with_rag
-from careerforge.prompts import MATCH_PROMPT_FINAL
-from careerforge.core.client import call_claude_json
+from careerforge.tools.tools import search_jobs_denmark, save_application, list_applications
+from careerforge.rag.rag import answer_with_rag
+from careerforge.llm.prompts import MATCH_PROMPT_FINAL
+from careerforge.llm.client import call_claude_json
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
@@ -18,8 +18,8 @@ router = APIRouter(dependencies=[Depends(get_current_user)])
 @router.post("/cv/analyze", response_model=CVAnalyzeResponse)
 def analyze_cv(req: CVAnalyzeRequest, current_user: str = Depends(get_current_user)):
     try:
-        from careerforge.prompts import CV_ANALYSIS_PROMPT
-        from careerforge.core.client import call_claude_json
+        from careerforge.llm.prompts import CV_ANALYSIS_PROMPT
+        from careerforge.llm.client import call_claude_json
         prompt = CV_ANALYSIS_PROMPT.format(cv_text=req.cv_text)
         result = call_claude_json(prompt)
         return result

@@ -1,6 +1,6 @@
 import base64
-from careerforge.core.config import SONNET_MODEL
-from careerforge.core.client import client, extract_json
+from careerforge.config import SONNET_MODEL
+from careerforge.llm.client import client, extract_json
 
 
 def analyze_cv_pdf(filepath: str) -> dict:

@@ -10,4 +10,4 @@ requires-python = ">=3.11"
 # Dependencies stay in requirements.txt for now (pinning = Step D).
 
 [tool.setuptools.packages.find]
-include = ["careerforge*", "interfaces*"]
+include = ["careerforge*"]

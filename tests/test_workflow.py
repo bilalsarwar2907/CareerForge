@@ -1,8 +1,8 @@
 import json
 from unittest.mock import patch
 
-from careerforge.services import workflow
-from careerforge.infrastructure.tools import list_applications
+from careerforge.pipeline import workflow
+from careerforge.tools.tools import list_applications
 
 FAKE_CV = {"name": "Test Person", "skills": ["Python", "SQL"]}
 FAKE_MATCH = {"score": 70, "strengths": ["Python"], "gaps": ["Docker", "Kubernetes"]}
@@ -14,10 +14,10 @@ def test_workflow_characterization(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "data").mkdir()
 
-    with patch("careerforge.services.workflow.analyze_cv_pdf", return_value=FAKE_CV) as mock_pdf, \
-         patch("careerforge.services.workflow.call_claude_json", side_effect=[FAKE_MATCH, FAKE_JOB_INFO]) as mock_json, \
-         patch("careerforge.services.workflow.answer_with_rag", return_value="Take a course.") as mock_rag, \
-         patch("careerforge.services.workflow.call_claude", return_value="Dear team...") as mock_letter:
+    with patch("careerforge.pipeline.workflow.analyze_cv_pdf", return_value=FAKE_CV) as mock_pdf, \
+         patch("careerforge.pipeline.workflow.call_claude_json", side_effect=[FAKE_MATCH, FAKE_JOB_INFO]) as mock_json, \
+         patch("careerforge.pipeline.workflow.answer_with_rag", return_value="Take a course.") as mock_rag, \
+         patch("careerforge.pipeline.workflow.call_claude", return_value="Dear team...") as mock_letter:
         report = workflow.run_career_workflow("cv.pdf", "AI Engineer at Coop")
 
 

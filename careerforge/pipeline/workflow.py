@@ -1,9 +1,9 @@
 import json
-from careerforge.infrastructure.pdf_handler import analyze_cv_pdf
-from careerforge.infrastructure.rag.rag import index_document, answer_with_rag
-from careerforge.infrastructure.tools import save_application
-from careerforge.prompts import MATCH_PROMPT_FINAL, JOB_INFO_PROMPT
-from careerforge.core.client import call_claude_json, call_claude
+from careerforge.pdf.pdf_handler import analyze_cv_pdf
+from careerforge.rag.rag import index_document, answer_with_rag
+from careerforge.tools.tools import save_application
+from careerforge.llm.prompts import MATCH_PROMPT_FINAL, JOB_INFO_PROMPT
+from careerforge.llm.client import call_claude_json, call_claude
 
 
 

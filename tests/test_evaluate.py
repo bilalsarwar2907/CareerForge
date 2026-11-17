@@ -1,6 +1,6 @@
 from unittest.mock import patch
 from scripts.evaluate import evaluate_prompt
-from careerforge.prompts import MATCH_PROMPT_V1
+from careerforge.llm.prompts import MATCH_PROMPT_V1
 
 
 @patch("scripts.evaluate.call_claude_json")
