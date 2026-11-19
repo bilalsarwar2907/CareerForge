@@ -17,11 +17,7 @@ router = APIRouter(dependencies=[Depends(get_current_user)])
 @router.post("/cv/analyze", response_model=CVAnalyzeResponse)
 def analyze_cv(req: CVAnalyzeRequest, current_user: str = Depends(get_current_user)):
     try:
-        from careerforge.llm.prompts import CV_ANALYSIS_PROMPT
-        from careerforge.llm.client import call_claude_json
-        prompt = CV_ANALYSIS_PROMPT.format(cv_text=req.cv_text)
-        result = call_claude_json(prompt)
-        return result
+        return CareerService().analyze_cv(req.cv_text)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
