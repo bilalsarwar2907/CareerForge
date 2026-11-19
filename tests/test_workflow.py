@@ -15,7 +15,8 @@ def test_workflow_characterization(tmp_path, monkeypatch):
     (tmp_path / "data").mkdir()
 
     with patch("careerforge.pipeline.workflow.analyze_cv_pdf", return_value=FAKE_CV) as mock_pdf, \
-         patch("careerforge.pipeline.workflow.call_claude_json", side_effect=[FAKE_MATCH, FAKE_JOB_INFO]) as mock_json, \
+         patch("careerforge.pipeline.career_service.call_claude_json", return_value=FAKE_MATCH) as mock_match, \
+         patch("careerforge.pipeline.workflow.call_claude_json", return_value=FAKE_JOB_INFO) as mock_json, \
          patch("careerforge.pipeline.workflow.answer_with_rag", return_value="Take a course.") as mock_rag, \
          patch("careerforge.pipeline.workflow.call_claude", return_value="Dear team...") as mock_letter:
         report = workflow.run_career_workflow("cv.pdf", "AI Engineer at Coop")
@@ -29,7 +30,8 @@ def test_workflow_characterization(tmp_path, monkeypatch):
 
     # 2. Calls
     mock_pdf.assert_called_once_with("cv.pdf")
-    assert mock_json.call_count == 2      # match + job info
+    mock_match.assert_called_once()       # match (via CareerService)
+    mock_json.assert_called_once()        # job info      
     assert mock_rag.call_count == 2       # one per gap
     mock_letter.assert_called_once()
 

@@ -2,7 +2,8 @@ import json
 from careerforge.pdf.pdf_handler import analyze_cv_pdf
 from careerforge.rag.rag import index_document, answer_with_rag
 from careerforge.tools.tools import save_application
-from careerforge.llm.prompts import MATCH_PROMPT_FINAL, JOB_INFO_PROMPT
+from careerforge.llm.prompts import JOB_INFO_PROMPT
+from careerforge.pipeline.career_service import CareerService
 from careerforge.llm.client import call_claude_json, call_claude
 
 
@@ -12,13 +13,8 @@ def run_career_workflow(cv_path: str, job_description: str) -> dict:
     print("\n[1/6] Extracting CV from PDF...")
     cv_data = analyze_cv_pdf(cv_path)
     print(f"  Found: {cv_data.get('name')}, skills: {cv_data.get('skills', [])[:3]}")
-
     print("\n[2/6] Scoring job match...")
-    prompt = MATCH_PROMPT_FINAL.format(
-        cv_text=json.dumps(cv_data),
-        job_text=job_description
-    )
-    match = call_claude_json(prompt)
+    match = CareerService().match_cv(json.dumps(cv_data), job_description)
     print(f"  Score: {match.get('score')} | Gaps: {match.get('gaps', [])}")
 
     print("\n[3/6] Finding resources for skill gaps...")
