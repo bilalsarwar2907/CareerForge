@@ -6,8 +6,7 @@ import json
 from careerforge.pipeline.cv_analysis import analyze_cv
 from careerforge.tools.tools import list_applications, search_jobs, search_jobs_denmark
 from careerforge.rag.rag import index_document, answer_with_rag
-from careerforge.llm.client import call_claude_json
-from careerforge.llm.prompts import MATCH_PROMPT_FINAL
+from careerforge.pipeline.career_service import CareerService
 
 # Index knowledge base on startup
 if "indexed" not in st.session_state:
@@ -52,10 +51,8 @@ with tab2:
     if st.button("Match"):
         if cv_input and job_input:
             with st.spinner("Matching..."):
-                result = call_claude_json(MATCH_PROMPT_FINAL.format(
-                    cv_text=cv_input, job_text=job_input
-                ))
-            score = result.get("score", 0)
+                result = CareerService().match_cv(cv_input, job_input)
+                score = result.get("score", 0)
             color = "green" if score >= 70 else "orange" if score >= 40 else "red"
             st.markdown(f"### Match Score: :{color}[{score}/100]")
             col3, col4 = st.columns(2)
