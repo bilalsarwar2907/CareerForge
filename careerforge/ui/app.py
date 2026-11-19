@@ -3,7 +3,6 @@ os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 import streamlit as st
 import json
-from careerforge.pipeline.cv_analysis import analyze_cv
 from careerforge.tools.tools import list_applications, search_jobs, search_jobs_denmark
 from careerforge.rag.rag import index_document, answer_with_rag
 from careerforge.pipeline.career_service import CareerService
@@ -28,7 +27,7 @@ with tab1:
     if st.button("Analyze"):
         if cv_text:
             with st.spinner("Analyzing..."):
-                result = analyze_cv(cv_text)
+                result = CareerService().analyze_cv(cv_text)
             st.subheader("Summary")
             st.write(result.get("summary", ""))
             st.subheader("Skills")

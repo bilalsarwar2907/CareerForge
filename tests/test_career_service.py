@@ -11,3 +11,13 @@ def test_match_cv(mock_claude):
     assert result == FAKE_MATCH
     prompt = mock_claude.call_args[0][0]
     assert "my cv" in prompt and "the job" in prompt
+
+
+
+@patch("careerforge.pipeline.career_service.call_claude_json", return_value={"skills": ["Python"]})
+def test_analyze_cv(mock_claude):
+    result = CareerService().analyze_cv("my cv")
+
+    assert result == {"skills": ["Python"]}
+    assert "my cv" in mock_claude.call_args[0][0]
+    assert "system" in mock_claude.call_args.kwargs    
