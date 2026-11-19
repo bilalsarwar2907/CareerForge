@@ -1,93 +1,83 @@
 # CareerForge
 
-An AI-powered career assistant built on the Anthropic Claude API. Upload CVs, match to job descriptions, identify skill gaps, generate cover letters, prepare for interviews, and track applications — all from a browser interface.
+A career helper app built with the Claude API (Anthropic).
+It reads your CV, compares it with a job, finds jobs, and keeps a list of your applications.
 
-Built checkpoint by checkpoint as a structured learning project. Every feature is demonstrable from the code.
-
----
-
-## What It Does
-
-- **CV Analysis** — paste CV text, get structured summary, skills, and recommendations
-- **Job Matching** — score a CV against a job description with strengths and gaps
-- **Job Search** — real listings via Adzuna API and Remotive (Denmark/remote focus)
-- **Application Tracker** — SQLite-backed application history
-- **Career Assistant** — RAG chat answering career questions from your knowledge base
-- **REST API** — FastAPI backend with JWT auth, all features exposed as HTTP endpoints
+This is a learning project. I build it step by step and keep the code simple.
 
 ---
 
-## Technical Stack
+## What it can do
 
-| Layer | Technology |
+- **CV Analysis** – paste your CV and get a short summary, your skills and tips.
+- **Job Match** – paste your CV and a job text and get a score, strengths and gaps.
+- **Job Search** – find jobs from Remotive (remote jobs) and Adzuna (UK jobs).
+- **Applications** – save the jobs you applied for (stored in SQLite).
+- **Career Assistant** – ask career questions. Answers use my own career notes (RAG).
+
+You can use it in three ways:
+- **Streamlit** – a simple web page with 5 tabs.
+- **REST API** – FastAPI with login (JWT token).
+- **Claude Desktop** – through an MCP server.
+
+---
+
+## Tools used
+
+| Part | Tool |
 |---|---|
-| LLM | Anthropic Claude API (Haiku + Sonnet) |
-| Vector Search | numpy cosine similarity + sentence-transformers |
-| Lexical Search | BM25 (rank-bm25) |
-| RAG Persistence | numpy .npy + JSON metadata |
-| Job Search API | Adzuna, Remotive |
+| AI model | Claude (Haiku by default) |
+| Search in my notes (RAG) | sentence-transformers + numpy + BM25 |
+| Job data | Remotive, Adzuna |
 | Database | SQLite |
-| REST API | FastAPI + Pydantic + JWT (python-jose + passlib) |
-| MCP Server | FastMCP |
-| UI | Streamlit |
-| Testing | pytest + FastAPI TestClient (23 tests, all APIs mocked) |
-| Deployment | Docker (python:3.11-slim) |
+| Web page | Streamlit |
+| API | FastAPI + JWT login |
+| Claude Desktop | FastMCP |
+| Tests | pytest (Claude calls are faked, so tests cost nothing) |
+| Run anywhere | Docker |
+| Auto tests on GitHub | GitHub Actions |
 
 ---
 
-## Architecture
+## Folders
 
 ```
-CareerForge/
-├── careerforge/
-│   ├── config.py          — all settings (single source of truth)
-│   ├── logger.py          — API call logging + cost tracking
-│   ├── llm/               — model calls: client.py (only file that calls Claude), prompts.py
-│   ├── agent/             — tool-calling agent loop
-│   ├── rag/               — chunking, numpy vector store, BM25, hybrid search
-│   ├── tools/             — Adzuna/Remotive job search + SQLite application tracker
-│   ├── pdf/               — CV PDF reading + prompt caching
-│   ├── pipeline/          — 6-step workflow + CV analysis
-│   ├── api/               — FastAPI app, routes, JWT auth, Pydantic models
-│   ├── mcp/               — FastMCP server for Claude Desktop
-│   └── ui/                — Streamlit app
-├── scripts/evaluate.py    — prompt evaluation with CSV output
-├── tests/                 — pytest (Claude API mocked)
-└── pyproject.toml         — makes careerforge installable (pip install -e .)
+careerforge/
+├── config.py        settings in one place
+├── logger.py        logs each Claude call and its cost
+├── llm/             talks to Claude + all prompts
+├── agent/           agent that can use tools
+├── rag/             search in my career notes
+├── tools/           job search + saved applications
+├── pdf/             read a CV from a PDF
+├── pipeline/        CareerService (match + CV analysis) and a 6-step workflow
+├── api/             FastAPI app and login
+├── mcp/             MCP server for Claude Desktop
+└── ui/              Streamlit app
+scripts/evaluate.py  tests different prompts
+tests/               pytest tests
 ```
 
----
-
-## Key Engineering Decisions
-
-**Hybrid Search** — RAG uses both vector search (numpy cosine similarity) and BM25 lexical search combined. Vector search finds semantically similar content; BM25 finds exact keyword matches. Together they outperform either alone.
-
-**Persistent RAG Index** — embeddings saved to `data/rag_index/embeddings.npy` and metadata to `data/rag_index/metadata.json`. Loaded on startup if present, rebuilt if not. No data loss on restart.
-
-**No ChromaDB** — ChromaDB was removed due to Python 3.14 threading incompatibilities with PyTorch. Replaced with a simple in-memory numpy vector store with disk persistence. Same retrieval quality, zero dependency conflicts.
-
-**Prompt Evaluation** — three prompt versions (zero-shot, few-shot, XML-structured) were tested against 20 labelled test cases. Winner selected by accuracy score, not opinion. Results saved to CSV as evidence.
-
-**JSON Reliability** — `extract_json()` in `client.py` tries four strategies: direct parse, markdown fence extraction, regex search, and Claude self-repair. Raw `json.loads()` is never used directly.
-
-**Single API Surface** — `client.py` is the only file that calls the Anthropic API. All other files import from it. Model names and settings come from `config.py`. Nothing is hardcoded.
-
-**JWT Auth** — FastAPI backend uses HTTPBearer scheme with python-jose JWT tokens and bcrypt-hashed passwords stored in SQLite. All business routes are protected.
-
-**MCP Integration** — CareerForge tools are exposed via FastMCP, allowing Claude Desktop to call `search_jobs`, `save_application`, `get_resume`, `list_applications`, and `ask_career_advisor` directly.
+**CareerService** is one class that does Job Match and CV Analysis.
+Streamlit, the API and the workflow all use it, so the logic lives in one place.
 
 ---
 
-## Setup
+## How to run it
+
+You need Python 3.11 or 3.12.
 
 ```bash
 git clone https://github.com/bilalsarwar2907/CareerForge.git
 cd CareerForge
+python -m venv .venv
+.venv\Scripts\Activate.ps1          # Windows (on Mac/Linux: source .venv/bin/activate)
 pip install -r requirements.txt
 pip install -e .
 ```
 
-Create `.env` (copy `.env.example`):
+Copy `.env.example` to `.env` and fill in your keys:
+
 ```
 ANTHROPIC_API_KEY=your_key_here
 DEFAULT_MODEL=claude-haiku-4-5-20251001
@@ -96,21 +86,23 @@ ADZUNA_APP_KEY=your_app_key
 JWT_SECRET_KEY=generate_your_own
 ```
 
-Generate `JWT_SECRET_KEY` with `python -c "import secrets; print(secrets.token_urlsafe(32))"`. The API refuses to start without it.
+Make a `JWT_SECRET_KEY` with:
+`python -c "import secrets; print(secrets.token_urlsafe(32))"`
+The API will not start without it.
 
-Run the FastAPI backend:
-```bash
-python -m uvicorn careerforge.api.main:app --reload --port 8888
-```
-
-Run the Streamlit UI:
+Start the Streamlit app:
 ```bash
 python -m streamlit run careerforge/ui/app.py
 ```
 
-Run tests:
+Start the API (docs at http://localhost:8888/docs):
 ```bash
-python -m pytest tests/ -v
+python -m uvicorn careerforge.api.main:app --port 8888
+```
+
+Run the tests:
+```bash
+python -m pytest -q
 ```
 
 Run with Docker:
@@ -118,28 +110,35 @@ Run with Docker:
 docker compose up --build
 ```
 
-API docs available at: http://localhost:8888/docs
-
 ---
 
-## Prompt Evaluation Results
+## Some choices I made
 
-| Prompt | Valid JSON | Fields | Score Accuracy |
+- **Settings in one file** – model names and paths come from `config.py`.
+- **Safe JSON** – Claude's answer is read with `extract_json()`. If the JSON is broken, it asks Claude once to fix it.
+- **Built-in retry** – I use the retry that comes with the Anthropic SDK instead of writing my own.
+- **Simple RAG** – no vector database. Embeddings are saved as a numpy file. Search mixes meaning (vectors) and keywords (BM25).
+- **Login on the API** – all API routes except register, login and health need a token.
+- **Prompt test** – I tested 3 prompt styles on 20 examples and picked the best one.
+
+| Prompt | Valid JSON | All fields | Score correct |
 |---|---|---|---|
-| V1 Zero-shot | 100% | 100% | 90% |
+| V1 Zero-shot | 100% | 100% | **90%** |
 | V2 Few-shot | 100% | 100% | 80% |
 | V3 XML | 100% | 100% | 85% |
 
-Winner: V1 Zero-shot at 90% accuracy on 20 test cases.
-
 ---
 
-## Portfolio Statement
+## Still to do
 
-Built an end-to-end AI career assistant using the Anthropic Claude API. It processes CVs via PDF extraction, scores job matches using prompt-engineered structured outputs with automated evaluation, retrieves career guidance via hybrid vector + BM25 RAG with persistent numpy index, calls real job APIs (Adzuna, Remotive) via tool use, runs a 6-step workflow pipeline, exposes a FastAPI REST backend with JWT authentication, exposes tools via MCP for Claude Desktop integration, and is production-hardened with centralised config, logging, cost tracking, retry logic, mocked pytest coverage, and Docker deployment."I used Claude, a model pre-trained self-supervised on huge data to predict next token, I didn't fine-tune it, I added domain knowledge via RAG: sentence chunking → embeddings → vector DB + BM25 hybrid search → retrieval → augmentation → generation, and I evaluated prompts with 20 test cases choosing V1 Zero-shot with 90%."
+- Fix: the API's CV Analysis does not return the summary and tips yet.
+- Split `tools.py` into smaller parts.
+- Make all Claude calls go through one file (`llm/client.py`).
+- Make the match score more strict.
+- Pin all package versions.
+
 ---
 
 ## Author
 
-Bilal Sarwar — [github.com/bilalsarwar2907](https://github.com/bilalsarwar2907)
-
+Bilal Sarwar – [github.com/bilalsarwar2907](https://github.com/bilalsarwar2907)
