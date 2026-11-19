@@ -9,8 +9,7 @@ from careerforge.api.models import (
 )
 from careerforge.tools.tools import search_jobs_denmark, save_application, list_applications
 from careerforge.rag.rag import answer_with_rag
-from careerforge.llm.prompts import MATCH_PROMPT_FINAL
-from careerforge.llm.client import call_claude_json
+from careerforge.pipeline.career_service import CareerService
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
@@ -29,12 +28,7 @@ def analyze_cv(req: CVAnalyzeRequest, current_user: str = Depends(get_current_us
 @router.post("/match", response_model=MatchResponse)
 def match_cv(req: MatchRequest):
     try:
-        prompt = MATCH_PROMPT_FINAL.format(
-            cv_text=req.cv_text,
-            job_text=req.job_description
-        )
-        result = call_claude_json(prompt)
-        return result
+        return CareerService().match_cv(req.cv_text, req.job_description)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -103,7 +103,7 @@ from unittest.mock import patch
 FAKE_MATCH = {"score": 75, "strengths": ["Python"], "gaps": ["Kubernetes"]}
 
 
-@patch("careerforge.api.routes.call_claude_json", return_value=FAKE_MATCH)
+@patch("careerforge.pipeline.career_service.call_claude_json", return_value=FAKE_MATCH)
 def test_match_characterization(mock_claude):
     token = get_token()
     response = client.post(
