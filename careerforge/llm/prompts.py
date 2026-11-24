@@ -61,6 +61,15 @@ Return: {{"company": "", "role": ""}}
 If a value is not stated, use "Unknown".
 """
 
+CV_EXTRACT_PROMPT = """Extract from this CV and return JSON only:
+{
+  "name": "full name",
+  "skills": ["skill1", "skill2"],
+  "experience_years": integer,
+  "education": ["degree1"],
+  "languages": ["lang1"]
+}"""
+
 PROMPT_REGISTRY = {
     "cv_analysis_v1": CV_ANALYSIS_PROMPT,
     "match_v1": MATCH_PROMPT_V1,

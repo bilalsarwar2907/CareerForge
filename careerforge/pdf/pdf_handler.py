@@ -1,6 +1,7 @@
 import base64
 from careerforge.config import SONNET_MODEL
 from careerforge.llm.client import client, extract_json
+from careerforge.llm.prompts import CV_EXTRACT_PROMPT
 
 
 def analyze_cv_pdf(filepath: str) -> dict:
@@ -24,14 +25,7 @@ def analyze_cv_pdf(filepath: str) -> dict:
                 },
                 {
                     "type": "text",
-                    "text": """Extract from this CV and return JSON only:
-{
-  "name": "full name",
-  "skills": ["skill1", "skill2"],
-  "experience_years": integer,
-  "education": ["degree1"],
-  "languages": ["lang1"]
-}"""
+                    "text": CV_EXTRACT_PROMPT
                 }
             ]
         }]
