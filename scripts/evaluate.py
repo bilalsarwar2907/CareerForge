@@ -2,6 +2,7 @@ import json
 import csv
 from datetime import datetime
 from careerforge.llm.client import call_claude_json
+from careerforge.config import DATA_DIR
 from careerforge.llm.prompts import MATCH_PROMPT_V1, MATCH_PROMPT_V2, MATCH_PROMPT_V3
 
 PROMPTS = {
@@ -42,7 +43,7 @@ def evaluate_prompt(prompt_template: str, tests: list) -> dict:
 
 
 def run_all():
-    with open("data/tests.json") as f:
+    with open(DATA_DIR / "tests.json") as f:
         tests = json.load(f)
 
     summary = []
@@ -56,7 +57,7 @@ def run_all():
               f"Accuracy: {metrics['score_accuracy_pct']:.0f}%")
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    with open(f"data/eval_{timestamp}.csv", "w", newline="") as f:
+    with open(DATA_DIR / f"eval_{timestamp}.csv", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=summary[0].keys())
         writer.writeheader()
         writer.writerows(summary)
