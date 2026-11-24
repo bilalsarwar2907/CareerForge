@@ -135,7 +135,8 @@ def test_route_requires_token(method, path):
 
 # --- B3e-2: /cv/analyze goes through CareerService (with system prompt, D29) ---
 
-@patch("careerforge.pipeline.career_service.call_claude_json", return_value={"skills": ["Python"]})
+@patch("careerforge.pipeline.career_service.call_claude_json", return_value={
+    "summary": "Python dev", "skills": ["Python"], "recommendations": ["Add tests"]})
 def test_cv_analyze_uses_service(mock_claude):
     token = get_token()
     response = client.post(
@@ -144,6 +145,8 @@ def test_cv_analyze_uses_service(mock_claude):
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 200
+    assert response.json()["summary"] == "Python dev"
     assert response.json()["skills"] == ["Python"]
+    assert response.json()["recommendations"] == ["Add tests"]
     assert "Python developer" in mock_claude.call_args[0][0]
     assert "system" in mock_claude.call_args.kwargs    

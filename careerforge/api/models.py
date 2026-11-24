@@ -8,10 +8,9 @@ class CVAnalyzeRequest(BaseModel):
 
 
 class CVAnalyzeResponse(BaseModel):
-    name: Optional[str] = None
+    summary: Optional[str] = None
     skills: list[str] = []
-    experience: list[str] = []
-    education: list[str] = []
+    recommendations: list[str] = []
 
 
 # --- Match ---
