@@ -22,6 +22,7 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
 KNOWLEDGE_DIR = DATA_DIR / "knowledge"
+RAG_INDEX_DIR = DATA_DIR / "rag_index"
 DB_PATH = DATA_DIR / "career.db"
 LOG_PATH = PROJECT_ROOT / "logs" / "app.log"
 

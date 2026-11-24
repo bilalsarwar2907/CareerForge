@@ -4,7 +4,7 @@ import nltk
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from rank_bm25 import BM25Okapi
-from careerforge.config import EMBED_MODEL, RETRIEVAL_TOP_K
+from careerforge.config import EMBED_MODEL, RETRIEVAL_TOP_K, RAG_INDEX_DIR
 from careerforge.llm.prompts import RAG_ANSWER_PROMPT
 
 nltk.download("punkt", quiet=True)
@@ -22,7 +22,7 @@ _bm25_index = None
 
 import json
 
-INDEX_DIR = "data/rag_index"
+INDEX_DIR = RAG_INDEX_DIR
 
 
 def save_index():
