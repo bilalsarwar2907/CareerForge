@@ -3,7 +3,7 @@ import sys
 from careerforge.pdf.pdf_handler import analyze_cv_pdf
 from careerforge.rag.rag import index_document, answer_with_rag
 from careerforge.tools.tools import save_application
-from careerforge.llm.prompts import JOB_INFO_PROMPT
+from careerforge.llm.prompts import JOB_INFO_PROMPT, COVER_LETTER_PROMPT
 from careerforge.pipeline.career_service import CareerService
 from careerforge.llm.client import call_claude_json, call_claude
 
@@ -26,11 +26,11 @@ def run_career_workflow(cv_path: str, job_description: str) -> dict:
         print(f"  {gap}: found resources")
 
     print("\n[4/6] Generating cover letter...")
-    cover_prompt = f"""Write a professional cover letter (3 paragraphs).
-Candidate: {json.dumps(cv_data)}
-Job: {job_description}
-Strengths to emphasize: {match.get('strengths', [])}
-Keep it under 300 words."""
+    cover_prompt = COVER_LETTER_PROMPT.format(
+        cv_json=json.dumps(cv_data),
+        job_text=job_description,
+        strengths=match.get('strengths', []),
+    )
     cover_letter = call_claude(cover_prompt, stream=True)
 
     print("\n[5/6] Saving application...")

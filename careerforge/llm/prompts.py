@@ -70,6 +70,12 @@ CV_EXTRACT_PROMPT = """Extract from this CV and return JSON only:
   "languages": ["lang1"]
 }"""
 
+COVER_LETTER_PROMPT = """Write a professional cover letter (3 paragraphs).
+Candidate: {cv_json}
+Job: {job_text}
+Strengths to emphasize: {strengths}
+Keep it under 300 words."""
+
 PROMPT_REGISTRY = {
     "cv_analysis_v1": CV_ANALYSIS_PROMPT,
     "match_v1": MATCH_PROMPT_V1,
