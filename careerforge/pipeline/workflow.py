@@ -1,4 +1,5 @@
 import json
+import sys
 from careerforge.pdf.pdf_handler import analyze_cv_pdf
 from careerforge.rag.rag import index_document, answer_with_rag
 from careerforge.tools.tools import save_application
@@ -55,7 +56,10 @@ Keep it under 300 words."""
     return report
 
 if __name__ == "__main__":
-    # Replace with your actual CV PDF path in data/pdfs/
-    CV_PATH = "data/pdfs/cv.pdf"
-    job = """..."""
-    run_career_workflow(CV_PATH, job)
+    if len(sys.argv) != 3:
+        print("Usage: python -m careerforge.pipeline.workflow <cv.pdf> <job.txt>")
+        sys.exit(1)
+    cv_path, job_path = sys.argv[1], sys.argv[2]
+    with open(job_path, encoding="utf-8") as f:
+        job = f.read()
+    run_career_workflow(cv_path, job)
