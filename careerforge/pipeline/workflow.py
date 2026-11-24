@@ -6,6 +6,7 @@ from careerforge.tools.tools import save_application
 from careerforge.llm.prompts import JOB_INFO_PROMPT, COVER_LETTER_PROMPT
 from careerforge.pipeline.career_service import CareerService
 from careerforge.llm.client import call_claude_json, call_claude
+from careerforge.config import DATA_DIR
 
 
 
@@ -49,7 +50,7 @@ def run_career_workflow(cv_path: str, job_description: str) -> dict:
         "gap_resources": gap_resources,
         "cover_letter": cover_letter
     }
-    with open("data/latest_report.json", "w") as f:
+    with open(DATA_DIR / "latest_report.json", "w") as f:
         json.dump(report, f, indent=2)
 
     print(f"\n✅ Complete. Score: {match.get('score')}. Report saved.")

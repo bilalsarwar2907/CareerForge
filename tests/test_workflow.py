@@ -10,8 +10,8 @@ FAKE_JOB_INFO = {"company": "Coop", "role": "AI Engineer"}
 
 
 def test_workflow_characterization(tmp_path, monkeypatch):
-    # workflow writes "data/latest_report.json" (relative path) -> run inside tmp_path
-    monkeypatch.chdir(tmp_path)
+    # workflow writes DATA_DIR / "latest_report.json" -> point DATA_DIR at tmp_path
+    monkeypatch.setattr(workflow, "DATA_DIR", tmp_path / "data")
     (tmp_path / "data").mkdir()
 
     with patch("careerforge.pipeline.workflow.analyze_cv_pdf", return_value=FAKE_CV) as mock_pdf, \
