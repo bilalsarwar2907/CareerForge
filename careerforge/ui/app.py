@@ -6,11 +6,12 @@ import json
 from careerforge.tools.tools import list_applications, search_jobs, search_jobs_denmark
 from careerforge.rag.rag import index_document, answer_with_rag
 from careerforge.pipeline.career_service import CareerService
+from careerforge.config import KNOWLEDGE_DIR
 
 # Index knowledge base on startup
 if "indexed" not in st.session_state:
-    if os.path.exists("data/knowledge/career_guide.txt"):
-        index_document("data/knowledge/career_guide.txt", "Career Guide")
+    if os.path.exists(KNOWLEDGE_DIR / "career_guide.txt"):
+        index_document(KNOWLEDGE_DIR / "career_guide.txt", "Career Guide")
     st.session_state.indexed = True
 
 st.set_page_config(page_title="CareerForge", layout="wide")
