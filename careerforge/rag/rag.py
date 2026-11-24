@@ -5,6 +5,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from rank_bm25 import BM25Okapi
 from careerforge.config import EMBED_MODEL, RETRIEVAL_TOP_K
+from careerforge.llm.prompts import RAG_ANSWER_PROMPT
 
 nltk.download("punkt", quiet=True)
 nltk.download("punkt_tab", quiet=True)
@@ -181,13 +182,7 @@ def answer_with_rag(question: str) -> str:
         for c in chunks
     ])
 
-    prompt = f"""Answer this career question using ONLY the documents below.
-After your answer, add a 'Sources:' section listing which documents you used.
-
-Documents:
-{context}
-
-Question: {question}"""
+    prompt = RAG_ANSWER_PROMPT.format(context=context, question=question)
 
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",

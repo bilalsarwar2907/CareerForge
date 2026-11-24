@@ -76,6 +76,14 @@ Job: {job_text}
 Strengths to emphasize: {strengths}
 Keep it under 300 words."""
 
+RAG_ANSWER_PROMPT = """Answer this career question using ONLY the documents below.
+After your answer, add a 'Sources:' section listing which documents you used.
+
+Documents:
+{context}
+
+Question: {question}"""
+
 PROMPT_REGISTRY = {
     "cv_analysis_v1": CV_ANALYSIS_PROMPT,
     "match_v1": MATCH_PROMPT_V1,
