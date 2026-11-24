@@ -33,7 +33,7 @@ You can use it in three ways:
 | Web page | Streamlit |
 | API | FastAPI + JWT login |
 | Claude Desktop | FastMCP |
-| Tests | pytest (Claude calls are faked, so tests cost nothing) |
+| Tests | pytest, 36 tests (Claude calls are faked, so tests cost nothing) |
 | Run anywhere | Docker |
 | Auto tests on GitHub | GitHub Actions |
 
