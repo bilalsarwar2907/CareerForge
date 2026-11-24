@@ -17,9 +17,16 @@ def test_save_application_returns_count():
 
 
 def test_get_resume_missing(tmp_path, monkeypatch):
-    monkeypatch.setattr("careerforge.tools.tools.get_resume", lambda: "No CV stored. Please upload one first.")
-    result = get_resume()
-    assert isinstance(result, str)
+    """No cv.txt in DATA_DIR -> friendly message."""
+    monkeypatch.setattr("careerforge.tools.tools.DATA_DIR", tmp_path)
+    assert get_resume() == "No CV stored. Please upload one first."
+
+
+def test_get_resume_present(tmp_path, monkeypatch):
+    """cv.txt in DATA_DIR -> its text is returned."""
+    (tmp_path / "cv.txt").write_text("My CV text")
+    monkeypatch.setattr("careerforge.tools.tools.DATA_DIR", tmp_path)
+    assert get_resume() == "My CV text"
 
 
 @patch("careerforge.tools.tools.requests.get")
