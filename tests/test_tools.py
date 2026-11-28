@@ -29,7 +29,7 @@ def test_get_resume_present(tmp_path, monkeypatch):
     assert get_resume() == "My CV text"
 
 
-@patch("careerforge.tools.tools.requests.get")
+@patch("careerforge.tools.job_providers.requests.get")
 def test_search_jobs_mocked(mock_get):
     """Adzuna API is mocked — no real HTTP call."""
     mock_get.return_value = MagicMock(json=lambda: {
